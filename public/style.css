@@ -1,0 +1,68 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 9pt;
+  background-color: #def2f1;
+  color: #fefff;
+  display: grid;
+  height: 90vh;
+  grid-template-columns: repeat(8, 12.5%);
+  grid-template-rows: repeat(8, 12.5%);
+  padding: 3%
+}
+h1, h2, h3, h3, h4 {
+  font-family: 'Proza Libre', sans-serif;
+}
+h1 {
+  font-size: 32pt;
+  font-weight: bolder;
+}
+h2 {
+  font-size: 26pt;
+  font-weight: bold;
+}
+h3 {
+  font-size: 22pt;
+  font-weight: bold;
+}
+h4 {
+  font-size: 18pt;
+  font-weight: bold;
+}
+.c-info {
+  text-transform: capitalize;
+}
+#search-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#search{
+  grid-column: 1/10;
+  grid-row: 1/1;
+}
+#c-description {
+  font-size: 7pt;
+}
+#company{
+  box-sizing: border-box;
+  padding: 3%;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  color: white;
+  background-color: #3AAFA9;
+  grid-column: 5/10;
+  grid-row-start: 5;
+  grid-row-end: 10;
+  border-radius: 8px;
+  overflow: hidden;
+}
+#company > ul > li {
+  font-weight: bold;
+}
+#company-header {
+  text-align: center;
+}

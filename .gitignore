@@ -1,6 +1,5 @@
 node_modules/
 serviceAccountKey.json
-apikey.js
 bundle.js
 bundle.js.map
 /log/*

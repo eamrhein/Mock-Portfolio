@@ -3,50 +3,51 @@ const firebase = require("firebase-admin");
 const app = express();
 const path = require('path');
 const fetch = require('node-fetch');
+const symbols = require('./stocksymbols')
 const PORT = process.env.PORT || 8000; // process.env accesses heroku's environment variables
 const serviceAccount = require('./serviceAccountKey.json');
+
+
 
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
   databaseURL: "https://mock-portfolio.firebaseio.com"
-});
+});\
+
 
 const db = firebase.firestore();
-const ref = db.collection('testCollection').doc('testDocument');
-
-
+const symbolsRef = db.collection('Market').doc('Symbols');
 app.use(express.static('public'))
 
 app.get('/', (request, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'))
+});
+
+
+app.get('/companyinfo/:sym', (req, res) => {
+  fetch(`https://cloud.iexapis.com/stable/stock/${req.params.sym}/company?token=pk_9c1ed2a08a2c4af2be14db7a6c97d602`)
+    .then((data) => {
+      return data.text();
+    })
+    .then((body) => {
+      let result = JSON.parse(body)
+      res.json(result);
+    })
+
 })
 
-app.get('/test', (req, res) => {
-  let getDoc = ref.get()
-    .then((doc) => {
-      if(!doc.exists) {
-        console.log('no doc')
-      } else {
-        res.json(doc.data())
-      }
+app.get('/historicaldata/:sym', (req, res) => {
+  fetch(`https://cloud.iexapis.com/stable/stock/${req.params.sym}/chart/2y?token=pk_9c1ed2a08a2c4af2be14db7a6c97d602&chartInterval=7`)
+    .then((data) => {
+      return data.text();
     })
-    .catch((err) => {
-      res.json(err)
+    .then((body) => {
+      let result = JSON.parse(body)
+      res.json(result);
     })
 })
 
-// // create route to get single book by its isbn
-// app.get('/books/:isbn', (request, response) => {
-//   // make api call using fetch
-//   fetch(`http://openlibrary.org/api/books?bibkeys=ISBN:${request.params.isbn}&format=json&jscmd=data`)
-//   .then((response) => {
-//       return response.text();
-//   }).then((body) => {
-//       let results = JSON.parse(body)
-//       console.log(results)   // logs to server
-//       response.send(results) // sends to frontend
-//     });
-// });
+
 
 // // create a search route
 // app.get('/search', (request, response) => {

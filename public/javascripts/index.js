@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const add = document.getElementById('add');
         const st = document.getElementById('st');
         const cty = document.getElementById('cty');
-        const des = document.getElementById('des');
 
         sym.innerHTML = res.symbol;
         cName.innerHTML = res.companyName;

@@ -1,8 +1,5 @@
 /node_modules
 serviceAccountKey.json
-bundle.js
 bundle.js.map
-/log/*
-/tmp/*
-!/log/.keep
-!/tmp/.keep
+bundle.js
+

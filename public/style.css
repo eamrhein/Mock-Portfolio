@@ -1,68 +1,112 @@
+html, body {
+  box-sizing: border-box;
+  margin: 0;
+  height: 100%;
+}
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 9pt;
   background-color: #def2f1;
-  color: #fefff;
+  color: #404040;
+  height: 100%;
   display: grid;
-  height: 90vh;
   grid-template-columns: repeat(8, 12.5%);
   grid-template-rows: repeat(8, 12.5%);
   padding: 3%
 }
-h1, h2, h3, h3, h4 {
-  font-family: 'Proza Libre', sans-serif;
+h1, h2, h3{
+  font-family: 'Libre Baskerville', serif;
+}
+h4 {
+  font-family: 'kreon', serif;
 }
 h1 {
-  font-size: 32pt;
+  font-size: 2.5rem;
   font-weight: bolder;
 }
 h2 {
-  font-size: 26pt;
+  font-size: 2rem;
   font-weight: bold;
 }
 h3 {
-  font-size: 22pt;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 h4 {
-  font-size: 18pt;
+  font-size: 1.25rem;
   font-weight: bold;
 }
-.c-info {
-  text-transform: capitalize;
-}
-#search-input {
+section {
+  border: 0.25rem solid #404040;
+  padding: 3%;
+  line-height: normal;
   display: flex;
-  flex-direction: column;
+  background-color: #FFFFFF;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  flex-direction: column;
+  color: #404040;
+  box-shadow: 0 8px 6px -6px #404040;
+  background-color: #FFFFFF;
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
+
 #search{
   grid-column: 1/10;
   grid-row: 1/1;
 }
-#c-description {
-  font-size: 7pt;
+#des {
+  font-size: 8pt;
+  text-indent: 2em;
 }
 #company{
-  box-sizing: border-box;
-  padding: 3%;
-  line-height: normal;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-basis: auto;
+  flex-grow: initial;
   flex-direction: column;
+  justify-content: center;
+  padding: 5%;
+  box-sizing: border-box;
+  line-height: 1.2em;
   color: white;
   background-color: #3AAFA9;
-  grid-column: 5/10;
+  grid-column: 6/9;
   grid-row-start: 5;
-  grid-row-end: 10;
+  grid-row-end: 9;
   border-radius: 8px;
-  overflow: hidden;
 }
-#company > ul > li {
+@media only screen and (max-width: 1000px) {
+  #company {
+    grid-column: 5/9;
+    grid-row-start: 4;
+    grid-row-end: 9;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #company {
+    grid-column: 1/9;
+    grid-row-start: 5;
+    grid-row-end: 9;
+  }
+}
+@media only screen and (max-width: 400px) {
+  #company {
+    grid-column: 1/9;
+    grid-row-start: 7;
+    grid-row-end: 10;
+  }
+}
+#company > table {
+  padding: 5%;
+  display: table;
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+#company > table > tr > td {
+  display: table-cell;
+}
+.cInfo-Key {
   font-weight: bold;
-}
-#company-header {
-  text-align: center;
 }

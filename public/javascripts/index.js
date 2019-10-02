@@ -1,13 +1,17 @@
 import {addCompanyInfo} from './api-calls';
 import {autocomplete} from './parsing';
+import {createPieChart} from './piechart';
+import {createLineChart} from './linechart';
+
 document.addEventListener('DOMContentLoaded', () => {
+  createPieChart('#pie-graph');
+  createLineChart('#line-chart');
   const search = document.getElementById('search');
   search.addEventListener('keyup', (e) => {
     autocomplete(e);
   });
   addCompanyInfo('AAPL')
       .then((res) => {
-        console.log(res);
         const sym = document.getElementById('sym');
         const cName = document.getElementById('cName');
         const web = document.getElementById('web');
@@ -28,6 +32,5 @@ document.addEventListener('DOMContentLoaded', () => {
         add.innerHTML = res.address;
         st.innerHTML = res.state;
         cty.innerHTML = res.city;
-        des.innerHTML = res.description;
       });
 });

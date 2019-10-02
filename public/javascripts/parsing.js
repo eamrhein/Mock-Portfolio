@@ -1,6 +1,5 @@
 
 import symbols from './stocksymbols.json';
-
 export const autocomplete = (e) => {
   const input = e.target;
   const minChars = 1;
@@ -10,10 +9,10 @@ export const autocomplete = (e) => {
   } else {
     list.innerHTML = '';
     symbols.forEach(function(symbol) {
-      if (list.children.length > 10) {
+      if (list.children.length > 20) {
         return;
       }
-      if (symbol.Symbol.includes(input.value.toUpperCase())) {
+      if (symbol.Symbol.slice(0, input.value.length).includes(input.value.toUpperCase())) {
         // Create a new <option> element.
         const option = document.createElement('option');
         option.value = symbol.Symbol;

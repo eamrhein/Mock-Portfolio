@@ -1,6 +1,10 @@
 import {addCompanyInfo} from './api-calls';
-
+import {autocomplete} from './parsing';
 document.addEventListener('DOMContentLoaded', () => {
+  const search = document.getElementById('search');
+  search.addEventListener('keyup', (e) => {
+    autocomplete(e);
+  });
   addCompanyInfo('AAPL')
       .then((res) => {
         console.log(res);
@@ -26,6 +30,5 @@ document.addEventListener('DOMContentLoaded', () => {
         st.innerHTML = res.state;
         cty.innerHTML = res.city;
         des.innerHTML = res.description;
-
       });
 });

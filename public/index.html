@@ -26,43 +26,34 @@
     </nav>
     <main id='company'>
       <div id="company-header">
-        <h3>Company Info</h3>
+        <h3 id="cName">Company Info</h3>
       </div>
-      <div>
-        <ul>
-          <li>
-            Symbol: <span id="sym"></span>
-          </li>
-          <li>
-            Company Name: <span id="cName"></span>
-          </li>
-          <li>
-            Website: <a id="web"></a>
-          </li>
-          <li>
-            CEO: <span id="ceo"></span>
-          </li>
-          <li>
-            Sector: <span id="sec"></span>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <ul>
-          <li>
-            Employees: <span id="emp"></span>
-          </li>
-          <li>
-            Address: <span id="add"></span>
-          </li>
-          <li>
-            State: <span id="st"></span>
-          </li>
-          <li>
-            City: <span id="cty"></span>
-          </li>
-        </ul>
-      </div>
+      <table class="c-table">
+        <tr>
+          <td class="cInfo-Key">Symbol:</td>
+          <td id="sym"></td>
+          <td class="cInfo-Key">Website</td>
+          <td id="web"></td>
+        </tr>
+        <tr>
+          <td class="cInfo-Key">Employees</td>
+          <td id="emp"></td>
+          <td class="cInfo-Key">Sector</td>
+          <td id="sec"></td>
+        </tr>
+          <tr>
+            <td class="cInfo-Key">City</td>
+            <td id="cty"></td>
+            <td class="cInfo-Key">Address</td>
+            <td id="add"></td>
+          </tr>
+          <tr>
+            <td class="cInfo-Key">State</td>
+            <td id="st"></td>
+            <td class="cInfo-Key">CEO:</td>
+            <td id="ceo"></td>
+          </tr>
+      </table>
       <p id="des"></p>
     </main>
   </body>

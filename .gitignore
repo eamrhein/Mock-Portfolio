@@ -1,5 +1,5 @@
 /node_modules
-serviceAccountKey.json
+apikey.js
 bundle.js.map
 bundle.js
 

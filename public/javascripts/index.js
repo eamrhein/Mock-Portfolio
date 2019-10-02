@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   search.addEventListener('keyup', (e) => {
     autocomplete(e);
   });
+  
   addCompanyInfo('AAPL')
       .then((res) => {
         const sym = document.getElementById('sym');

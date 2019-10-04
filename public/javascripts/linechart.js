@@ -1,76 +1,272 @@
+/* eslint-disable require-jsdoc */
+/* eslint-disable no-invalid-this */
 
-export const createLineChart = (element) => {
-  // 2. Use the margin convention practice
-  const margin = {top: 25, right: 25, bottom: 25, left: 25};
-  const width = d3.select(element).style('width').slice(0, -2) - 50;
-  const height = d3.select(element).style('height').slice(0, -2) -50;
-  // The number of datapoints
-  const n = 10;
+export const createLineChart = (element, parsedData) => {
+  parsedData = parsedData.filter((row) => (
+    row['high'] && row['low'] && row['close'] && row['open']
+  ));
+  const data = parsedData;
+  const margin = {top: 20, right: 5, bottom: 20, left: 5};
+  const width = d3.select(element).style('width').slice(0, -2);
+  const height = d3.select(element).style('height').slice(0, -2) * 0.8;
 
-  // 5. X scale will use the index of our data
-  const xScale = d3.scaleLinear()
-      .domain([0, n - 1]) // input
-      .range([0, width]); // output
 
-  // 6. Y scale will use the randomly generate number
-  const yScale = d3.scaleLinear()
-      .domain([0, 1]) // input
-      .range([height, 0]); // output
+  const movingAverage = (data, numberOfPricePoints) => {
+    return data.map((row, index, total) => {
+      const start = Math.max(0, index - numberOfPricePoints);
+      const end = index;
+      const subset = total.slice(start, end + 1);
+      const sum = subset.reduce((a, b) => {
+        return a + b['close'];
+      }, 0);
 
-  // 7. d3's line generator
-  const line = d3.line()
-      .x(function(d, i) {
-        return xScale(i);
-      }) // set the x values for the line generator
-      .y(function(d) {
-        return yScale(d.y);
-      }) // set the y values for the line generator
-      .curve(d3.curveMonotoneX); // apply smoothing to the line
+      return {
+        date: row['date'],
+        average: sum / subset.length,
+      };
+    });
+  };
 
-  // 8. An array of objects of length N. Each object has key -> value pair, the key being "y" and the value is a random number
-  const dataset = d3.range(n).map(function(d) {
-    return {'y': d3.randomUniform(1)()};
+  // credits: https://brendansudol.com/writing/responsive-d3
+  // const responsivefy = (svg) => {
+  //   // get container + svg aspect ratio
+  //   const container = d3.select(svg.node().parentNode);
+  //   const width = parseInt(svg.style('width')) * 1.05;
+  //   const height = parseInt(svg.style('height'));
+  //   const aspect = width / height;
+
+  //   // get width of container and resize svg to fit it
+  //   const resize = () => {
+  //     const targetWidth = parseInt(container.style('width')) * 1.05;
+  //     svg.attr('width', targetWidth);
+  //     svg.attr('height', Math.round(targetWidth / aspect));
+  //   };
+
+  //   // add viewBox and preserveAspectRatio properties,
+  //   // and call resize so that svg resizes on inital page load
+  //   svg
+  //       .attr('viewBox', '0 0 ' + width + ' ' + height)
+  //       .attr('perserveAspectRatio', 'xMinYMid')
+  //       .call(resize);
+
+  //   // to register multiple listeners for same event type,
+  //   // you need to add namespace, i.e., 'click.foo'
+  //   // necessary if you call invoke this function for multiple svgs
+  //   // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+  //   d3.select(window).on('resize.' + container.attr('id'), resize);
+  // };
+
+  const xMin = d3.min(data, (d) => {
+    return d['date'];
+  });
+  const xMax = d3.max(data, (d) => {
+    return d['date'];
   });
 
-  // 1. Add the SVG to the page and employ #2
-  const svg = d3.select(element).append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
+  const yMin = d3.min(data, (d) => {
+    return d['close'];
+  });
+
+  const yMax = d3.max(data, (d) => {
+    return d['close'];
+  });
+
+  const xScale = d3
+      .scaleTime()
+      .domain([xMin, xMax])
+      .range([0, width]);
+
+  const yScale = d3
+      .scaleTime()
+      .domain([yMin - 5, yMax])
+      .range([height, 0]);
+
+  const svg = d3
+      .select(element)
+      .append('svg')
+      .attr('width', width + margin['left'] + margin['right'])
+      .attr('height', height + margin['top'] + margin['bottom'])
+      // .call(responsivefy)
       .append('g')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      .attr('transform', `translate(${margin['left']}, ${margin['top']})`);
 
-  // 3. Call the x axis in a group tag
-  svg.append('g')
-      .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + height + ')')
-      .call(d3.axisBottom(xScale)); // Create an axis component with d3.axisBottom
+  svg
+      .append('g')
+      .attr('id', 'xAxis')
+      .attr('transform', `translate(0, ${height})`)
+      .call(d3.axisBottom(xScale));
 
-  // 4. Call the y axis in a group tag
-  svg.append('g')
-      .attr('class', 'y axis')
-      .call(d3.axisLeft(yScale)); // Create an axis component with d3.axisLeft
-
-  // 9. Append the path, bind the data, and call the line generator
-  svg.append('path')
-      .datum(dataset) // 10. Binds data to the line
-      .attr('class', 'line') // Assign a class for styling
-      .attr('d', line); // 11. Calls the line generator
-
-  // 12. Appends a circle for each datapoint
-  svg.selectAll('.dot')
-      .data(dataset)
-      .enter().append('circle') // Uses the enter().append() method
-      .attr('class', 'dot') // Assign a class for styling
-      .attr('cx', function(d, i) {
-        return xScale(i);
+  svg
+      .append('g')
+      .attr('id', 'yAxis')
+      .attr('transform', `translate(${width}, 0)`)
+      .call(d3.axisRight(yScale));
+  const line = d3
+      .line()
+      .x((d) => {
+        return xScale(d['date']);
       })
-      .attr('cy', function(d) {
-        return yScale(d.y);
+      .y((d) => {
+        return yScale(d['close']);
+      });
+  const movingAverageLine = d3
+      .line()
+      .x((d) => {
+        return xScale(d['date']);
       })
-      .attr('r', 5)
-      .on('mouseover', function(a, b, c) {
-        console.log(a);
-        this.attr('class', 'focus');
+      .y((d) => {
+        return yScale(d['average']);
       })
-      .on('mouseout', function() { });
+      .curve(d3.curveBasis);
+  svg
+      .append('path')
+      .data([data]) // binds data to the line
+      .style('fill', 'none')
+      .attr('id', 'priceChart')
+      .attr('stroke', 'steelblue')
+      .attr('stroke-width', '3')
+      .attr('d', line);
+  const movingAverageData = movingAverage(data, 24);
+  svg
+      .append('path')
+      .data([movingAverageData])
+      .style('fill', 'none')
+      .attr('id', 'movingAverageLine')
+      .attr('stroke', '#FF8900')
+      .attr('stroke-width', '3')
+      .attr('d', movingAverageLine);
+  const focus = svg
+      .append('g')
+      .attr('class', 'focus')
+      .style('display', 'none');
+
+  focus.append('circle').attr('r', 4.5);
+  focus.append('line').classed('x', true);
+  focus.append('line').classed('y', true);
+
+  svg
+      .append('rect')
+      .attr('class', 'overlay')
+      .attr('width', width)
+      .attr('height', height)
+      .on('mouseover', () => focus.style('display', null))
+      .on('mouseout', () => focus.style('display', 'none'))
+      .on('mousemove', generateCrosshair);
+
+  d3.select('.overlay').style('fill', 'none');
+  d3.select('.overlay').style('pointer-events', 'all');
+
+  d3.selectAll('.focus line').style('fill', 'none');
+  d3.selectAll('.focus line').style('stroke', '#67809f');
+  d3.selectAll('.focus line').style('stroke-width', '1.5px');
+  d3.selectAll('.focus line').style('stroke-dasharray', '3 3');
+
+  // returs insertion point
+  const bisectDate = d3.bisector((d) => d.date).left;
+
+  /* mouseover function to generate crosshair */
+  function generateCrosshair() {
+    // returns corresponding value from the domain
+    const correspondingDate = xScale.invert(d3.mouse(this)[0]);
+    // gets insertion point
+    const i = bisectDate(data, correspondingDate, 1);
+    const d0 = data[i - 1];
+    const d1 = data[i];
+    const currentPoint =
+      correspondingDate - d0['date'] > d1['date'] - correspondingDate ? d1 : d0;
+    focus.attr(
+        'transform',
+        `translate(${xScale(currentPoint['date'])}, ${yScale(
+            currentPoint['close']
+        )})`
+    );
+
+    focus
+        .select('line.x')
+        .attr('x1', 0)
+        .attr('x2', width - xScale(currentPoint['date']))
+        .attr('y1', 0)
+        .attr('y2', 0);
+
+    focus
+        .select('line.y')
+        .attr('x1', 0)
+        .attr('x2', 0)
+        .attr('y1', 0)
+        .attr('y2', height - yScale(currentPoint['close']));
+
+    updateLegends(currentPoint);
+  }
+
+  const updateLegends = (currentData) => {
+    d3.selectAll('.lineLegend').remove();
+
+    const legendKeys = Object.keys(data[0]);
+    const lineLegend = svg
+        .selectAll('.lineLegend')
+        .data(legendKeys)
+        .enter()
+        .append('g')
+        .attr('class', 'lineLegend')
+        .attr('transform', (d, i) => {
+          return `translate(0, ${i * 20})`;
+        });
+    lineLegend
+        .append('text')
+        .text((d) => {
+          if (d === 'date') {
+            return `${d}: ${currentData[d].toLocaleDateString()}`;
+          } else if (
+            d === 'high' ||
+          d === 'low' ||
+          d === 'open' ||
+          d === 'close'
+          ) {
+            return `${d}: ${currentData[d].toFixed(2)}`;
+          } else {
+            return `${d}: ${currentData[d]}`;
+          }
+        })
+        .style('fill', 'black')
+        .attr('transform', 'translate(15,9)');
+  };
+
+  const volData = data.filter((d) => d['volume'] !== null && d['volume'] !== 0);
+
+  const yMinVolume = d3.min(volData, (d) => {
+    return Math.min(d['volume']);
+  });
+
+  const yMaxVolume = d3.max(volData, (d) => {
+    return Math.max(d['volume']);
+  });
+
+  const yVolumeScale = d3
+      .scaleLinear()
+      .domain([yMinVolume, yMaxVolume])
+      .range([height, height * (3 / 4)]);
+
+  svg
+      .selectAll()
+      .data(volData)
+      .enter()
+      .append('rect')
+      .attr('x', (d) => {
+        return xScale(d['date']);
+      })
+      .attr('y', (d) => {
+        return yVolumeScale(d['volume']);
+      })
+      .attr('class', 'vol')
+      .attr('fill', (d, i) => {
+        if (i === 0) {
+          return '#03a678';
+        } else {
+          return volData[i - 1].close > d.close ? '#c0392b' : '#03a678';
+        }
+      })
+      .attr('width', 10)
+      .attr('height', (d) => {
+        return height - yVolumeScale(d['volume']);
+      });
 };

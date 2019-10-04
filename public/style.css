@@ -108,31 +108,20 @@ section {
   grid-row-start: 10;
   grid-row-end: 18;
 }
-.line {
-    fill: none;
-    stroke: #ffab00;
-    stroke-width: 3;
-}
 
-.overlay {
-  fill: none;
-  pointer-events: all;
-}
-
-/* Style the dots by assigning a fill and stroke */
-.dot {
-    fill: #ffab00;
-    stroke: #fff;
-}
-
-  .focus circle {
-  fill: none;
-  stroke: steelblue;
-}
 #line-chart {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
   grid-column: 7/18;
   grid-row-start: 3;
   grid-row-end: 10;
+}
+#line-chart > svg {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 #stock-table {
   grid-column: 3/7;
@@ -148,26 +137,84 @@ section {
   text-align: center;
 }
 @media only screen and (max-width: 1000px) {
-  #company {
-    grid-column: 5/9;
-    grid-row-start: 4;
-    grid-row-end: 9;
-  }
+  #line-chart {
+  justify-content: flex-end;
+  grid-column: 7/18;
+  grid-row-start: 3;
+  grid-row-end: 10;
+}
+
+  #pie-graph {
+  flex-direction: column;
+  grid-column: 7/18;
+  grid-row-start: 10;
+  grid-row-end: 18;
+}
+
+#stock-table {
+  grid-column: 3/7;
+  grid-row-start: 3;
+  grid-row-end:  35 span;
+}
+#company{
+  grid-column: 7/18;
+  grid-row-start: 18;
+  grid-row-end: 20 span;
+}
+
 }
 
 @media only screen and (max-width: 700px) {
-  #company {
-    grid-column: 1/9;
-    grid-row-start: 5;
-    grid-row-end: 9;
-  }
+ #line-chart {
+  justify-content: flex-end;
+  grid-column: 3/18;
+  grid-row-start: 3;
+  grid-row-end: 10;
+}
+
+  #pie-graph {
+  flex-direction: column;
+  grid-column: 3/18;
+  grid-row-start: 10;
+  grid-row-end: 18;
+}
+
+#stock-table {
+  grid-column: 3/18;
+  grid-row-start: 3;
+  grid-row-end:  10;
+}
+#company{
+  grid-column: 3/18;
+  grid-row-start: 18;
+  grid-row-end: 20 span;
+}
 }
 @media only screen and (max-width: 400px) {
-  #company {
-    grid-column: 1/9;
-    grid-row-start: 7;
-    grid-row-end: 10;
-  }
+ #line-chart {
+  justify-content: flex-end;
+  grid-column: 3/18;
+  grid-row-start: 3;
+  grid-row-end: 10;
+}
+
+  #pie-graph {
+  flex-direction: column;
+  grid-column: 3/18;
+  grid-row-start: 10;
+  grid-row-end: 18;
+}
+
+#stock-table {
+  grid-column: 3/18;
+  grid-row-start: 3;
+  grid-row-end:  10;
+}
+#company{
+  grid-column: 3/18;
+  grid-row-start: 18;
+  grid-row-end: 20 span;
+}
 }
 #company > table {
   padding: 5%;

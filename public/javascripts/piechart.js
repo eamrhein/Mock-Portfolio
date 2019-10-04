@@ -1,9 +1,10 @@
+/* eslint-disable require-jsdoc */
+/* eslint-disable no-invalid-this */
 
 export const createPieChart = (element) => {
   const width = 300;
   const height = 300;
   const radius = Math.min(width, height) / 2;
-
   const svg = d3.select(element)
       .append('svg')
       .attr('width', width)
@@ -19,44 +20,33 @@ export const createPieChart = (element) => {
       .sort(null);
 
   const arc = d3.arc()
-      .innerRadius(0)
+      .innerRadius(Math.min(width, height)/ 5)
       .outerRadius(radius);
 
-  function type(d) {
-    d.apples = Number(d.apples);
-    d.oranges = Number(d.oranges);
-    return d;
-  }
-
-  function arcTween(a) {
+  const arcTween = (a) => {
     const i = d3.interpolate(this._current, a);
     this._current = i(1);
     return (t) => arc(i(t));
-  }
+  };
 
   d3.json('./javascripts/data.json').then((data) => {
     d3.selectAll('input')
         .on('change', update);
-
     function update(val = this.value) {
-      // Join new data
       const path = svg.selectAll('path')
           .data(pie(data[val]));
 
-      // Update existing arcs
       path.transition().duration(200).attrTween('d', arcTween);
 
-      // Enter new arcs
       path.enter().append('path')
-          .attr('fill', (d, i) => color(i))
+          .attr('fill', (_d, i) => color(i))
           .attr('d', arc)
           .attr('stroke', 'white')
           .attr('stroke-width', '6px')
           .each(function(d) {
             this._current = d;
           });
-    }
-
-    update('apples');
+    };
+    update('apples',);
   });
 };

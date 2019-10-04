@@ -1,16 +1,29 @@
-import {addCompanyInfo} from './api-calls';
-import {autocomplete} from './parsing';
-import {createPieChart} from './piechart';
+import {addCompanyInfo, get2yearCompanyPrices} from './api-calls';
+import {autocomplete, parseStockPrices} from './parsing';
 import {createLineChart} from './linechart';
+import {createPieChart} from './piechart';
+import Stock from './stock_table';
 
-document.addEventListener('DOMContentLoaded', () => {
-  createPieChart('#pie-graph');
-  createLineChart('#line-chart');
-  const search = document.getElementById('search');
-  search.addEventListener('keyup', (e) => {
+document.addEventListener('DOMContentLoaded', (e) => {
+  // DEFALT SETTINGS
+  const stocks = [
+    {'TSLA': 10},
+    {'GOOG': 10},
+    {'MSFT': 10},
+    {'AMZN': 50},
+    {'AAPL': 20},
+  ];
+  // INPUT EVENTS
+  const search = document.getElementById('search-box');
+  search.addEventListener('input', (e) => {
     autocomplete(e);
   });
-  
+  const button = document.getElementById('add-stock');
+  button.addEventListener('click', (e) => {
+    if (stocks.every(stock => stock.key !== search.value)){
+      const b = new Stock(search.value);
+    }
+  });
   addCompanyInfo('AAPL')
       .then((res) => {
         const sym = document.getElementById('sym');
@@ -34,4 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
         st.innerHTML = res.state;
         cty.innerHTML = res.city;
       });
+  get2yearCompanyPrices('AAPL')
+      .then((res) => {
+        createLineChart('#line-chart', parseStockPrices(res));
+      });
+  createPieChart('#pie-graph');
 });

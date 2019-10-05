@@ -6,9 +6,9 @@ export const createLineChart = (element, parsedData) => {
     row['high'] && row['low'] && row['close'] && row['open']
   ));
   const data = parsedData;
-  const margin = {top: 20, right: 5, bottom: 20, left: 5};
-  const width = d3.select(element).style('width').slice(0, -2);
-  const height = d3.select(element).style('height').slice(0, -2) * 0.8;
+  const margin = {top: 5, right: 30, bottom: 25, left: 5};
+  const width = d3.select(element).style('width').slice(0, -2) * 0.94;
+  const height = d3.select(element).style('height').slice(0, -2) * 0.90;
 
 
   const movingAverage = (data, numberOfPricePoints) => {
@@ -28,33 +28,28 @@ export const createLineChart = (element, parsedData) => {
   };
 
   // credits: https://brendansudol.com/writing/responsive-d3
-  // const responsivefy = (svg) => {
-  //   // get container + svg aspect ratio
-  //   const container = d3.select(svg.node().parentNode);
-  //   const width = parseInt(svg.style('width')) * 1.05;
-  //   const height = parseInt(svg.style('height'));
-  //   const aspect = width / height;
+  const responsivefy = (svg) => {
+    // get container + svg aspect ratio
+    const container = d3.select(svg.node().parentNode);
+    // const width = parseInt(svg.style('width'));
+    // const height = parseInt(svg.style('height'));
 
-  //   // get width of container and resize svg to fit it
-  //   const resize = () => {
-  //     const targetWidth = parseInt(container.style('width')) * 1.05;
-  //     svg.attr('width', targetWidth);
-  //     svg.attr('height', Math.round(targetWidth / aspect));
-  //   };
 
-  //   // add viewBox and preserveAspectRatio properties,
-  //   // and call resize so that svg resizes on inital page load
-  //   svg
-  //       .attr('viewBox', '0 0 ' + width + ' ' + height)
-  //       .attr('perserveAspectRatio', 'xMinYMid')
-  //       .call(resize);
+    // get width of container and resize svg to fit it
+    const resize = () => {
+      const targetWidth = parseInt(container.style('width'));
+      const theight = parseInt(container.style('height'));
+      svg.attr('width', targetWidth);
+      svg.attr('height', theight);
+    };
 
-  //   // to register multiple listeners for same event type,
-  //   // you need to add namespace, i.e., 'click.foo'
-  //   // necessary if you call invoke this function for multiple svgs
-  //   // api docs: https://github.com/mbostock/d3/wiki/Selections#on
-  //   d3.select(window).on('resize.' + container.attr('id'), resize);
-  // };
+
+    // to register multiple listeners for same event type,
+    // you need to add namespace, i.e., 'click.foo'
+    // necessary if you call invoke this function for multiple svgs
+    // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+    d3.select(window).on('resize.' + container.attr('id'), resize);
+  };
 
   const xMin = d3.min(data, (d) => {
     return d['date'];
@@ -86,7 +81,7 @@ export const createLineChart = (element, parsedData) => {
       .append('svg')
       .attr('width', width + margin['left'] + margin['right'])
       .attr('height', height + margin['top'] + margin['bottom'])
-      // .call(responsivefy)
+      .call(responsivefy)
       .append('g')
       .attr('transform', `translate(${margin['left']}, ${margin['top']})`);
 
@@ -123,16 +118,16 @@ export const createLineChart = (element, parsedData) => {
       .data([data]) // binds data to the line
       .style('fill', 'none')
       .attr('id', 'priceChart')
-      .attr('stroke', 'steelblue')
+      .attr('stroke', '#003f5c')
       .attr('stroke-width', '3')
       .attr('d', line);
-  const movingAverageData = movingAverage(data, 24);
+  const movingAverageData = movingAverage(data, 52);
   svg
       .append('path')
       .data([movingAverageData])
       .style('fill', 'none')
       .attr('id', 'movingAverageLine')
-      .attr('stroke', '#FF8900')
+      .attr('stroke', '#ffa600')
       .attr('stroke-width', '3')
       .attr('d', movingAverageLine);
   const focus = svg
@@ -209,7 +204,7 @@ export const createLineChart = (element, parsedData) => {
         .append('g')
         .attr('class', 'lineLegend')
         .attr('transform', (d, i) => {
-          return `translate(0, ${i * 20})`;
+          return `translate(5, ${i * 20 + 10})`;
         });
     lineLegend
         .append('text')
@@ -260,9 +255,9 @@ export const createLineChart = (element, parsedData) => {
       .attr('class', 'vol')
       .attr('fill', (d, i) => {
         if (i === 0) {
-          return '#03a678';
+          return '#488f31';
         } else {
-          return volData[i - 1].close > d.close ? '#c0392b' : '#03a678';
+          return volData[i - 1].close > d.close ? '#de425b' : '#488f31';
         }
       })
       .attr('width', 10)

@@ -1,30 +1,47 @@
-
-import symbols from './stocksymbols.json';
-
-export const autocomplete = (e) => {
-  const input = e.target.value;
-  const minChars = 0;
-  const list = document.getElementById('autolist');
-  if (input.length < minChars) {
-    return;
-  } else {
-    list.innerHTML = '';
-    symbols.forEach(function(symbol) {
-      if (list.children.length > 30) {
-        return;
-      }
+/* eslint-disable no-invalid-this */
+export const autocomplete = (inp, arr) => {
+  inp.addEventListener('input', function(e) {
+    const val = this.value;
+    closeAllLists();
+    if (!val) {
+      return false;
+    }
+    const a = document.getElementById('autolist');
+    a.innerHTML = '';
+    for (let i = 0; i < arr.length; i++) {
+      if (a.children.length > 20) return;
       if (
-        symbol.Symbol
-            .slice(0, input.length)
-            .includes(input.toUpperCase())
-      ) {
-        const option = document.createElement('option');
-        option.value = symbol.Symbol;
-        option.innerHTML = symbol['Company Name'];
-        list.appendChild(option);
+        arr[i]['Symbol']
+            .substr(0, val.length)
+            .toUpperCase() ==
+              val.toUpperCase()) {
+        const b = document.createElement('option');
+        b.setAttribute('class', 'autocomplete-items');
+        b.value = arr[i]['Symbol'];
+        b.innerHTML = '<strong>' + arr[i]['Company Name'].substr(0, val.length) + '</strong>';
+        b.innerHTML += arr[i]['Company Name'].substr(val.length);
+        b.addEventListener('click', function(e) {
+          inp.value = this.getElementsByTagName('input')[0].value;
+          closeAllLists();
+        });
+        if (a.children) {
+          a.appendChild(b);
+        }
       }
-    });
-  }
+    }
+  });
+  const closeAllLists = (elmnt) => {
+    /* close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    const x = document.getElementsByClassName('autocomplete-items');
+    for (let i = 0; i < x.length; i++) {
+      x[i].parentNode.removeChild(x[i]);
+    }
+  };
+  /* execute a function when someone clicks in the document:*/
+  document.addEventListener('click', function(e) {
+    closeAllLists(e.target);
+  });
 };
 
 export const parseStockPrices = (stockData) => {

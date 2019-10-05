@@ -1,7 +1,7 @@
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 11pt;
-  background-color: #fcfcfa;
+  background-color: #F2EDD8;
   color: #404040;
   display: grid;
   grid-template-columns: repeat(20, 4.5%);
@@ -35,14 +35,13 @@ h4 {
 }
 section {
   border: 0.25rem solid #404040;
-  line-height: normal;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #FFFFFF;
+  line-height: normal;
+  background-color: #FFFEFC;
   color: #404040;
   box-shadow: 0 8px 6px -6px #404040;
-  background-color: #FFFFFF;
   overflow: hidden;
 }
 
@@ -98,13 +97,10 @@ section {
   transition: all 0.3s ease 0s;
 }
 
-#des {
-  font-size: 0.8rem;
-}
-
 #pie-graph {
-  flex-direction: column;
-  grid-column: 12/18;
+  justify-content: flex-start;
+  position: relative;
+  grid-column: 4/18;
   grid-row-start: 10;
   grid-row-end: 18;
 }
@@ -113,16 +109,46 @@ section {
   position: relative;
   display: inline-block;
   vertical-align: middle;
-  grid-column: 7/18;
+  grid-column: 4 /18;
   grid-row-start: 3;
   grid-row-end: 10;
 }
-#line-chart > svg {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
+g text {
+  font-weight: bolder;
+  text-transform: capitalize;
 }
+.linelegend text {
+  font-size: 9pt;
+}
+.legend {
+  z-index: 10;
+  font-size: 14pt;
+}
+rect {
+  cursor: pointer;
+  stroke-width: 2;
+}
+rect.disabled {
+  fill: transparent !important;
+}
+
+
+/* tooltip */
+.tooltip {
+  background: #eee;
+  box-shadow: 0 0 5px #999999;
+  color: #333;
+  display: none;
+  font-size: 18px;
+  left: 130px;
+  padding: 10px;
+  position: absolute;
+  text-align: center;
+  top: 95px;
+  width: 80px;
+  z-index: 10;
+}
+
 #stock-table {
   grid-column: 3/7;
   grid-row-start: 3;
@@ -216,12 +242,4 @@ section {
   grid-row-end: 20 span;
 }
 }
-#company > table {
-  padding: 5%;
-  display: table;
-  margin-top: 5%;
-  margin-bottom: 5%;
-}
-#company > table > tr > td {
-  display: table-cell;
-}
+

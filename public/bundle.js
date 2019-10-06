@@ -75,15 +75,10 @@ module.exports = [{"Symbol":"AAIT","Company Name":"iShares MSCI All Country Asia
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_calls__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parsing__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stocksymbols_json__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stocksymbols_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__stocksymbols_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__linechart__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__piechart__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__stock_table__ = __webpack_require__(7);
-
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dom__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stocksymbols_json__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stocksymbols_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__stocksymbols_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__portfolio__ = __webpack_require__(8);
 
 
 
@@ -91,45 +86,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 document.addEventListener('DOMContentLoaded', e => {
   // DEFALT SETTINGS
-  const stocks = [{ 'TSLA': 10 }, { 'GOOG': 10 }, { 'MSFT': 10 }, { 'AMZN': 50 }, { 'AAPL': 20 }];
+  const stocks = [{
+    sym: 'TSLA',
+    shares: 10,
+    name: 'Tesla Motors, Inc.'
+  }, {
+    sym: 'GOOG',
+    shares: 30,
+    name: 'Google Inc.'
+  }, {
+    sym: 'MSFT',
+    shares: 20,
+    name: 'Microsoft Corporation'
+  }, {
+    sym: 'AAPL',
+    shares: 40,
+    name: 'APPLE Inc.'
+  }, {
+    sym: 'AMZN',
+    shares: 10,
+    name: 'Amazon.com Inc.'
+  }];
+  const initialStocks = new __WEBPACK_IMPORTED_MODULE_2__portfolio__["a" /* default */](stocks);
   // INPUT EVENTS
   const search = document.getElementById('search-box');
-  Object(__WEBPACK_IMPORTED_MODULE_1__parsing__["a" /* autocomplete */])(search, __WEBPACK_IMPORTED_MODULE_2__stocksymbols_json___default.a);
+  Object(__WEBPACK_IMPORTED_MODULE_0__dom__["a" /* autocomplete */])(search, __WEBPACK_IMPORTED_MODULE_1__stocksymbols_json___default.a);
 
   const button = document.getElementById('add-stock');
   button.addEventListener('click', e => {
+    if (stocks.length > 6) {
+      alert('can only add up to 6 stocks');
+    }
     if (stocks.every(stock => stock.key !== search.value)) {
-      const b = new __WEBPACK_IMPORTED_MODULE_5__stock_table__["a" /* default */](search.value);
       console.log(b);
     }
   });
-  // addCompanyInfo('AAPL')
-  //     .then((res) => {
-  //       const sym = document.getElementById('sym');
-  //       const cName = document.getElementById('cName');
-  //       const web = document.getElementById('web');
-  //       const ceo = document.getElementById('ceo');
-  //       const sec = document.getElementById('sec');
-  //       const emp = document.getElementById('emp');
-  //       const add = document.getElementById('add');
-  //       const st = document.getElementById('st');
-  //       const cty = document.getElementById('cty');
-
-  //       sym.innerHTML = res.symbol;
-  //       cName.innerHTML = res.companyName;
-  //       web.innerHTML = res.website;
-  //       web.href = res.website;
-  //       ceo.innerHTML = res.CEO;
-  //       sec.innerHTML = res.sector;
-  //       emp.innerHTML = res.employees;
-  //       add.innerHTML = res.address;
-  //       st.innerHTML = res.state;
-  //       cty.innerHTML = res.city;
-  //     });
-  Object(__WEBPACK_IMPORTED_MODULE_0__api_calls__["a" /* get2yearCompanyPrices */])('AAPL').then(res => {
-    Object(__WEBPACK_IMPORTED_MODULE_3__linechart__["a" /* createLineChart */])('#line-chart', Object(__WEBPACK_IMPORTED_MODULE_1__parsing__["b" /* parseStockPrices */])(res));
-  });
-  Object(__WEBPACK_IMPORTED_MODULE_4__piechart__["a" /* createPieChart */])('#pie-graph');
 });
 
 /***/ }),
@@ -137,8 +128,20 @@ document.addEventListener('DOMContentLoaded', e => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = fetchdata;
+/* eslint-disable require-jsdoc */
 
 const apikeys = __webpack_require__(3);
+
+async function fetchdata(syms) {
+  try {
+    const history = await Promise.all(syms.map(async sym => await (await fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/chart/2y?token=${apikeys.iexkey}&chartInterval=14`)).json()));
+    return history;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const addCompanyInfo = sym => {
   return fetch(`https://cloud.iexapis.com/stable/stock/${sym}/company?token=${apikeys.iexkey}`).then(res => {
     return res.json();
@@ -147,72 +150,22 @@ const addCompanyInfo = sym => {
 /* unused harmony export addCompanyInfo */
 
 
-const get2yearCompanyPrices = sym => {
-  return fetch(`https://cloud.iexapis.com/stable/stock/${sym}/chart/2y?token=${apikeys.iexkey}&chartInterval=10`).then(res => {
-    return res.json();
-  });
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = get2yearCompanyPrices;
-
-
 /***/ }),
 /* 3 */
 /***/ (function(module, exports) {
 
-
 module.exports = {
-  iexkey: 'pk_9c1ed2a08a2c4af2be14db7a6c97d602'
+  iexkey: 'pk_5b573d37d6e34cedaf9b10461bd54c43'
 };
+//iexkey: 'pk_5b573d37d6e34cedaf9b10461bd54c43',
+// iexkey: 'pk_9c1ed2a08a2c4af2be14db7a6c97d602',
 
 /***/ }),
 /* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* eslint-disable no-invalid-this */
-const autocomplete = (inp, arr) => {
-  inp.addEventListener('input', function (e) {
-    const val = this.value;
-    closeAllLists();
-    if (!val) {
-      return false;
-    }
-    const a = document.getElementById('autolist');
-    a.innerHTML = '';
-    for (let i = 0; i < arr.length; i++) {
-      if (a.children.length > 20) return;
-      if (arr[i]['Symbol'].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-        const b = document.createElement('option');
-        b.setAttribute('class', 'autocomplete-items');
-        b.value = arr[i]['Symbol'];
-        b.innerHTML = '<strong>' + arr[i]['Company Name'].substr(0, val.length) + '</strong>';
-        b.innerHTML += arr[i]['Company Name'].substr(val.length);
-        b.addEventListener('click', function (e) {
-          inp.value = this.getElementsByTagName('input')[0].value;
-          closeAllLists();
-        });
-        if (a.children) {
-          a.appendChild(b);
-        }
-      }
-    }
-  });
-  const closeAllLists = elmnt => {
-    /* close all autocomplete lists in the document,
-    except the one passed as an argument:*/
-    const x = document.getElementsByClassName('autocomplete-items');
-    for (let i = 0; i < x.length; i++) {
-      x[i].parentNode.removeChild(x[i]);
-    }
-  };
-  /* execute a function when someone clicks in the document:*/
-  document.addEventListener('click', function (e) {
-    closeAllLists(e.target);
-  });
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = autocomplete;
-
-
+// creates Date object from pai calls;
 const parseStockPrices = stockData => {
   const prices = [];
   for (let i = 0; i < stockData.length; i++) {
@@ -231,6 +184,17 @@ const parseStockPrices = stockData => {
 };
 /* harmony export (immutable) */ __webpack_exports__["b"] = parseStockPrices;
 
+// combines multiple api queries and sums them;
+const combineStockHistories = histories => histories.reduce(history => history.map(quoteObj => {
+  Object.entries(quoteObj).forEach(([key, val]) => {
+    if (key !== 'date') {
+      quoteObj[key] = (quoteObj[key] || 0) + val;
+    }
+  });
+  return quoteObj;
+}));
+/* harmony export (immutable) */ __webpack_exports__["a"] = combineStockHistories;
+
 
 /***/ }),
 /* 5 */
@@ -243,8 +207,8 @@ const parseStockPrices = stockData => {
 const createLineChart = (element, parsedData) => {
   parsedData = parsedData.filter(row => row['high'] && row['low'] && row['close'] && row['open']);
   const data = parsedData;
-  const margin = { top: 5, right: 30, bottom: 25, left: 5 };
-  const width = d3.select(element).style('width').slice(0, -2) * 0.94;
+  const margin = { top: 5, right: 205, bottom: 25, left: 5 };
+  const width = d3.select(element).style('width').slice(0, -2) * 0.93;
   const height = d3.select(element).style('height').slice(0, -2) * 0.90;
 
   const movingAverage = (data, numberOfPricePoints) => {
@@ -267,9 +231,6 @@ const createLineChart = (element, parsedData) => {
   const responsivefy = svg => {
     // get container + svg aspect ratio
     const container = d3.select(svg.node().parentNode);
-    // const width = parseInt(svg.style('width'));
-    // const height = parseInt(svg.style('height'));
-
 
     // get width of container and resize svg to fit it
     const resize = () => {
@@ -293,17 +254,13 @@ const createLineChart = (element, parsedData) => {
     return d['date'];
   });
 
-  const yMin = d3.min(data, d => {
-    return d['close'];
-  });
-
   const yMax = d3.max(data, d => {
     return d['close'];
   });
 
   const xScale = d3.scaleTime().domain([xMin, xMax]).range([0, width]);
 
-  const yScale = d3.scaleTime().domain([yMin - 5, yMax]).range([height, 0]);
+  const yScale = d3.scaleLinear().domain([0, yMax * 2]).range([height, 5]);
 
   const svg = d3.select(element).append('svg').attr('width', width + margin['left'] + margin['right']).attr('height', height + margin['top'] + margin['bottom']).call(responsivefy).append('g').attr('transform', `translate(${margin['left']}, ${margin['top']})`);
 
@@ -349,8 +306,8 @@ const createLineChart = (element, parsedData) => {
     const correspondingDate = xScale.invert(d3.mouse(this)[0]);
     // gets insertion point
     const i = bisectDate(data, correspondingDate, 1);
-    const d0 = data[i - 1];
-    const d1 = data[i];
+    const d0 = data[i - 1] || 0;
+    const d1 = data[i] || 0;
     const currentPoint = correspondingDate - d0['date'] > d1['date'] - correspondingDate ? d1 : d0;
     focus.attr('transform', `translate(${xScale(currentPoint['date'])}, ${yScale(currentPoint['close'])})`);
 
@@ -414,200 +371,216 @@ const createLineChart = (element, parsedData) => {
 
 "use strict";
 /* eslint-disable no-invalid-this */
-const createPieChart = element => {
-  // define data
-  const dataset = [{ label: 'Google', count: 13 }, { label: 'Facebook', count: 83 }, { label: 'Twitter', count: 46 }, { label: 'AirBnB', count: 300 }, { label: 'LinkedIn', count: 38 }, { label: 'Tesla', count: 20 }, { label: 'Microsoft', count: 33 }, { label: 'Amazon', count: 72 }, { label: 'Trillo', count: 33 }, { label: 'Twitch', count: 29 }, { label: 'Uber', count: 61 }];
-
-  // chart dimensions
+const createPieChart = (element, dataset) => {
   const width = d3.select(element).style('width').slice(0, -2);
   const height = d3.select(element).style('height').slice(0, -2) * 0.95;
-
-  // a circle chart needs a radius
   const radius = Math.min(width, height) / 2;
 
-  // legend dimensions
-  const legendRectSize = 13; // defines the size of the colored squares in legend
-  const legendSpacing = 10; // defines spacing between squares
+  const legendRectSize = 13;
+  const legendSpacing = 10;
 
-  // define color scale
-  const color = d3.scaleOrdinal(d3.schemeCategory20b);
+  const color = d3.scaleOrdinal(['#7B1FA2', '#CD128A', '#FC476B', '#FF8452', '#FFC04E', '#F9F871']);
 
-  const svg = d3.select(element) // select element in the DOM with id 'chart'
-  .append('svg') // append an svg element to the element we've selected
-  .attr('width', width) // set the width of the svg element we just added
-  .attr('height', height) // set the height of the svg element we just added
-  .append('g') // append 'g' element to the svg element
-  .attr('transform', 'translate(' + width / 2.3 + ',' + height / 2 + ')'); // our reference is now to the 'g' element. centerting the 'g' element to the svg element
+  const svg = d3.select(element).append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+  const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
-  const arc = d3.arc().innerRadius(0) // none for pie chart
-  .outerRadius(radius); // size of overall chart
+  const pie = d3.pie().value(function (d) {
+    return d.shares;
+  }).sort(null);
 
-  const pie = d3.pie() // start and end angles of the segments
-  .value(function (d) {
-    return d.count;
-  }) // how to extract the numerical data from each entry in our dataset
-  .sort(null); // by default, data sorts in oescending value. this will mess with our animation so we set it to null
+  const tooltip = d3.select(element).append('div').attr('class', 'tooltip');
 
-  // define tooltip
-  const tooltip = d3.select(element) // select element in the DOM with id 'chart'
-  .append('div') // append a div element to the element we've selected
-  .attr('class', 'tooltip'); // add class 'tooltip' on the divs we just selected
+  tooltip.append('div').attr('class', 'symbol');
 
-  tooltip.append('div') // add divs to the tooltip defined above
-  .attr('class', 'label'); // add class 'label' on the selection
+  tooltip.append('div').attr('class', 'shares');
 
-  tooltip.append('div') // add divs to the tooltip defined above
-  .attr('class', 'count'); // add class 'count' on the selection
-
-  tooltip.append('div') // add divs to the tooltip defined above
-  .attr('class', 'percent'); // add class 'percent' on the selection
+  tooltip.append('div').attr('class', 'percent');
 
   dataset.forEach(function (d) {
-    d.count = +d.count; // calculate count as we iterate through the data
-    d.enabled = true; // add enabled property to track which entries are checked
+    d.shares = +d.shares;
+    d.enabled = true;
   });
 
-  // creating the chart
-  let path = svg.selectAll('path').data(pie(dataset)) // associate dataset wit he path elements we're about to create. must pass through the pie function. it magically knows how to extract values and bakes it into the pie
-  .enter() // creates placeholder nodes for each of the values
-  .append('path') // replace placeholders with path elements
-  .attr('d', arc) // define d attribute with arc function above
-  .attr('fill', function (d) {
-    return color(d.data.label);
-  }) // use color scale to define fill of each label in dataset
-  .each(function (d) {
+  let path = svg.selectAll('path').data(pie(dataset)).enter().append('path').attr('d', arc).attr('fill', function (d) {
+    return color(d.data.sym);
+  }).each(function (d) {
     this._current - d;
-  }); // creates a smooth animation for each track
+  });
 
-  // mouse event handlers are attached to path so they need to come after its definition
   path.on('mouseover', function (d) {
-    // when mouse enters div
     const total = d3.sum(dataset.map(function (d) {
-      // calculate the total number of tickets in the dataset
-      return d.enabled ? d.count : 0; // checking to see if the entry is enabled. if it isn't, we return 0 and cause other percentages to increase
+      return d.enabled ? d.shares : 0;
     }));
-    const percent = Math.round(1000 * d.data.count / total) / 10; // calculate percent
-    tooltip.select('.label').html(d.data.label); // set current label
-    tooltip.select('.count').html('$' + d.data.count); // set current count
-    tooltip.select('.percent').html(percent + '%'); // set percent calculated above
-    tooltip.style('display', 'block'); // set display
+    const percent = Math.round(1000 * d.data.shares / total) / 10;
+    tooltip.select('.symbol').html(d.data.sym);
+    tooltip.select('.shares').html(d.data.shares + ' shares');
+    tooltip.select('.percent').html(percent + '%');
+    tooltip.style('display', 'block');
   });
 
   path.on('mouseout', function () {
-    // when mouse leaves div
-    tooltip.style('display', 'none'); // hide tooltip for that element
+    tooltip.style('display', 'none');
   });
 
   path.on('mousemove', function (d) {
-    // when mouse moves
-    tooltip.style('top', d3.event.layerY + 10 + 'px') // always 10px below the cursor
-    .style('left', d3.event.layerX + 10 + 'px'); // always 10px to the right of the mouse
+    tooltip.style('top', d3.event.layerY + 10 + 'px').style('left', d3.event.layerX + 10 + 'px');
   });
 
-  // define legend
-  const legend = svg.selectAll('.legend') // selecting elements with class 'legend'
-  .data(color.domain()) // refers to an array of labels from our dataset
-  .enter() // creates placeholder
-  .append('g') // replace placeholders with g elements
-  .attr('class', 'legend') // each g is given a legend class
-  .attr('transform', function (d, i) {
-    const height = legendRectSize + legendSpacing; // height of element is the height of the colored square plus the spacing
-    const offset = height * color.domain().length / 2; // vertical offset of the entire legend = height of a single element & half the total number of elements
-    const horz = 26 * legendRectSize; // the legend is shifted to the left to make room for the text
-    const vert = i * height - offset; // the top of the element is hifted up or down from the center using the offset defiend earlier and the index of the current element 'i'
-    return 'translate(' + horz + ',' + vert + ')'; // return translation
+  const legend = svg.selectAll('.legend').data(color.domain()).enter().append('g').attr('class', 'legend').attr('transform', function (d, i) {
+    const height = legendRectSize + legendSpacing;
+    const offset = height * color.domain().length / 2;
+    const horz = 26 * legendRectSize;
+    const vert = i * height - offset;
+    return 'translate(' + horz + ',' + vert + ')';
   });
 
-  // adding colored squares to legend
-  legend.append('rect') // append rectangle squares to legend
-  .attr('width', legendRectSize) // width of rect size is defined above
-  .attr('height', legendRectSize) // height of rect size is defined above
-  .style('fill', color) // each fill is passed a color
-  .style('stroke', color) // each stroke is passed a color
-  .on('click', function (label) {
-    const rect = d3.select(this); // this refers to the colored squared just clicked
-    let enabled = true; // set enabled true to default
+  legend.append('rect').attr('width', legendRectSize).attr('height', legendRectSize).style('fill', color).style('stroke', color).on('click', function (sym) {
+    const rect = d3.select(this);
+    let enabled = true;
     const totalEnabled = d3.sum(dataset.map(function (d) {
-      // can't disable all options
-      return d.enabled ? 1 : 0; // return 1 for each enabled entry. and summing it up
+      return d.enabled ? 1 : 0;
     }));
 
     if (rect.attr('class') === 'disabled') {
-      // if class is disabled
-      rect.attr('class', ''); // remove class disabled
+      rect.attr('class', '');
     } else {
-      // else
-      if (totalEnabled < 2) return; // if less than two labels are flagged, exit
-      rect.attr('class', 'disabled'); // otherwise flag the square disabled
-      enabled = false; // set enabled to false
+      if (totalEnabled < 2) return;
+      rect.attr('class', 'disabled');
+      enabled = false;
     }
 
     pie.value(function (d) {
-      if (d.label === label) d.enabled = enabled; // if entry label matches legend label
-      return d.enabled ? d.count : 0; // update enabled property and return count or 0 based on the entry's status
+      if (d.sym === sym) d.enabled = enabled;
+      return d.enabled ? d.shares : 0;
     });
 
-    path = path.data(pie(dataset)); // update pie with new data
+    path = path.data(pie(dataset));
 
-    path.transition() // transition of redrawn pie
-    .duration(750) //
-    .attrTween('d', function (d) {
-      // 'd' specifies the d attribute that we'll be animating
-      const interpolate = d3.interpolate(this._current, d); // this = current path element
-      this._current = interpolate(0); // interpolate between current value and the new value of 'd'
+    path.transition().duration(750).attrTween('d', function (d) {
+      const interpolate = d3.interpolate(this._current, d);
+      this._current = interpolate(0);
       return function (t) {
         return arc(interpolate(t));
       };
     });
   });
 
-  // adding text to legend
   legend.append('text').attr('x', legendRectSize + legendSpacing).attr('y', legendRectSize - 2).text(function (d) {
     return d;
-  }); // return label
+  });
 };
 /* harmony export (immutable) */ __webpack_exports__["a"] = createPieChart;
 
 
 /***/ }),
-/* 7 */
+/* 7 */,
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stocksymbols_json__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stocksymbols_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__stocksymbols_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_calls__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__linechart__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__piechart__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__parsing__ = __webpack_require__(4);
 /* eslint-disable require-jsdoc */
 
 
-class Stock {
-  constructor(sym, shares) {
-    this.sym = sym;
-    this.name = __WEBPACK_IMPORTED_MODULE_0__stocksymbols_json___default.a.find(stock => stock.Symbol === sym)['Company Name'];
-    this.shares = 0;
-    this.createLi(sym, name);
-  }
 
-  createLi(sym, name) {
-    const list = document.getElementById('company-list');
-    console.log(list);
-    const li = document.createElement('li');
-    li.setAttribute('id', this.sym);
-    li.appendChild(document.createTextNode(this.name));
-    list.appendChild(li);
+
+class Portfolio {
+  constructor(stocks) {
+    this.stocks = stocks;
+    this.buildCharts(stocks);
+    this.createStockList(stocks);
   }
-  plusShare() {
-    this.count += 1;
+  createStockList(stocks) {
+    const stockList = document.getElementById('stocklist');
+    console.log(stockList);
+    stocks.forEach(stock => {
+      const div = document.createElement('div');
+      const h4 = document.createElement('h4');
+      const span = document.createElement('span');
+      const btnA = document.createElement('button');
+      const btnS = document.createElement('button');
+      const bdiv = document.createElement('div');
+      h4.innerText = stock.name;
+      span.innerText = stock.shares + ' Shares';
+      btnA.classList.add('plus-btn');
+      btnS.classList.add('minus-btn');
+      btnA.innerText = '+';
+      btnS.innerText = '-';
+      div.classList.add('stocklist-item');
+      div.appendChild(h4);
+      div.appendChild(span);
+      bdiv.appendChild(btnA);
+      bdiv.appendChild(btnS);
+      div.appendChild(bdiv);
+      stockList.appendChild(div);
+    });
   }
-  minuShare() {
-    if (this.count === 1) {
-      this.count = 0;
-    } else {
-      this.count -= 1;
+  buildCharts(stocks) {
+    Object(__WEBPACK_IMPORTED_MODULE_0__api_calls__["a" /* fetchdata */])(stocks).then(histories => {
+      const combinedHistory = Object(__WEBPACK_IMPORTED_MODULE_3__parsing__["a" /* combineStockHistories */])(histories);
+      Object(__WEBPACK_IMPORTED_MODULE_2__piechart__["a" /* createPieChart */])('#pie-chart', this.stocks);
+      Object(__WEBPACK_IMPORTED_MODULE_1__linechart__["a" /* createLineChart */])('#line-chart', Object(__WEBPACK_IMPORTED_MODULE_3__parsing__["b" /* parseStockPrices */])(combinedHistory));
+    });
+  }
+  addShare(sym) {
+    this.stocks[sym]++;
+  }
+  removeShare(sym) {
+    this.stocks[sym]--;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Portfolio);
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* eslint-disable no-invalid-this */
+/* eslint-disable max-len */
+const autocomplete = (inp, arr) => {
+  inp.addEventListener('input', function (e) {
+    const val = this.value;
+    closeAllLists();
+    if (!val) {
+      return false;
     }
-  }
-}
+    const a = document.getElementById('autolist');
+    a.innerHTML = '';
+    for (let i = 0; i < arr.length; i++) {
+      if (a.children.length > 20) return;
+      if (arr[i]['Symbol'].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+        const b = document.createElement('option');
+        b.setAttribute('class', 'autocomplete-items');
+        b.value = arr[i]['Symbol'];
+        b.innerHTML = '<strong>' + arr[i]['Company Name'].substr(0, val.length) + '</strong>';
+        b.innerHTML += arr[i]['Company Name'].substr(val.length);
+        b.addEventListener('click', function (e) {
+          inp.value = this.getElementsByTagName('input')[0].value;
+          closeAllLists();
+        });
+        if (a.children) {
+          a.appendChild(b);
+        }
+      }
+    }
+  });
+  const closeAllLists = elmnt => {
+    const x = document.getElementsByClassName('autocomplete-items');
+    for (let i = 0; i < x.length; i++) {
+      x[i].parentNode.removeChild(x[i]);
+    }
+  };
+  document.addEventListener('click', function (e) {
+    closeAllLists(e.target);
+  });
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = autocomplete;
 
-/* harmony default export */ __webpack_exports__["a"] = (Stock);
 
 /***/ })
 /******/ ]);

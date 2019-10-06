@@ -6,8 +6,8 @@ export const createLineChart = (element, parsedData) => {
     row['high'] && row['low'] && row['close'] && row['open']
   ));
   const data = parsedData;
-  const margin = {top: 5, right: 30, bottom: 25, left: 5};
-  const width = d3.select(element).style('width').slice(0, -2) * 0.94;
+  const margin = {top: 5, right: 205, bottom: 25, left: 5};
+  const width = d3.select(element).style('width').slice(0, -2) * 0.93;
   const height = d3.select(element).style('height').slice(0, -2) * 0.90;
 
 
@@ -31,9 +31,6 @@ export const createLineChart = (element, parsedData) => {
   const responsivefy = (svg) => {
     // get container + svg aspect ratio
     const container = d3.select(svg.node().parentNode);
-    // const width = parseInt(svg.style('width'));
-    // const height = parseInt(svg.style('height'));
-
 
     // get width of container and resize svg to fit it
     const resize = () => {
@@ -58,10 +55,6 @@ export const createLineChart = (element, parsedData) => {
     return d['date'];
   });
 
-  const yMin = d3.min(data, (d) => {
-    return d['close'];
-  });
-
   const yMax = d3.max(data, (d) => {
     return d['close'];
   });
@@ -72,9 +65,9 @@ export const createLineChart = (element, parsedData) => {
       .range([0, width]);
 
   const yScale = d3
-      .scaleTime()
-      .domain([yMin - 5, yMax])
-      .range([height, 0]);
+      .scaleLinear()
+      .domain([0, yMax * 2])
+      .range([height, 5]);
 
   const svg = d3
       .select(element)
@@ -165,8 +158,8 @@ export const createLineChart = (element, parsedData) => {
     const correspondingDate = xScale.invert(d3.mouse(this)[0]);
     // gets insertion point
     const i = bisectDate(data, correspondingDate, 1);
-    const d0 = data[i - 1];
-    const d1 = data[i];
+    const d0 = data[i - 1] || 0;
+    const d1 = data[i] || 0;
     const currentPoint =
       correspondingDate - d0['date'] > d1['date'] - correspondingDate ? d1 : d0;
     focus.attr(

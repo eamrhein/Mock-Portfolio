@@ -1,5 +1,4 @@
-/node_modules
-apikey.js
-bundle.js.map
 bundle.js
+bundle.js.map
+/node_modules
 

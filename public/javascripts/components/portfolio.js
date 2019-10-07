@@ -12,9 +12,20 @@ import {createPieChart} from './piechart';
 export default class Portfolio extends Component {
   constructor() {
     super({
-      store: store || {},
+      store: store,
       element: document.querySelector('#stocklist'),
     });
+  }
+  addShare(sym) {
+    store.dispatch('addShare', sym);
+    d3.select('#pie-chart').remove();
+    this.buildCharts();
+  }
+
+  minusShare(sym) {
+    store.dispatch('minusShare', sym);
+    d3.select('#pie-chart').select('svg').remove();
+    this.buildCharts();
   }
 
   buildCharts() {
@@ -22,32 +33,57 @@ export default class Portfolio extends Component {
     createLineChart('#line-chart', parseStockPrices(combinedHistory));
     createPieChart('#pie-chart', parsePieGraph(store.state.company));
   }
+  createElements() {
+    const btns = document.getElementsByClassName('plus-btn');
+    for (const btn of btns) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.addShare(btn.id);
+        btn.focus();
+      });
+    }
+    const btnsM = document.getElementsByClassName('minus-btn');
+    for (const btn of btnsM) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.minusShare(btn.id);
+      });
+    }
+  }
 
   render() {
     const {company} = store.state;
+    let string = '';
     const companyList = Object.keys(company)
         .map((key) => {
-          const li = document.createElement('li');
-          const div = document.createElement('div');
-          const h4 = document.createElement('h4');
-          const shares = document.createElement('li');
-          const btnP = document.createElement('button');
-          const btnM = document.createElement('button');
-          h4.innerText = company[key].info.companyName;
-          shares.innerText = company[key].shares + ' Shares';
-          btnP.innerText = '+';
-          btnM.innerText = '-';
-          div.appendChild(h4);
-          div.appendChild(shares);
-          div.appendChild(btnP);
-          div.appendChild(btnM);
-          li.appendChild(div);
-          return li;
-        }
-        );
+          return (
+            `
+                <li>
+                  <div>
+                    <h4>${company[key].info.companyName}</h4>
+                    <li>${company[key].shares } Shares</li>
+                    <button
+                      id=${key}
+                      class='plus-btn'
+                    >
+                     +
+                    </button>
+                    <button
+                      id=${key}
+                      class='minus-btn'
+                    >
+                     -
+                    </button>
+                  </div>
+                </li>
+            `
+          );
+        });
     companyList.forEach((item) => {
-      this.element.appendChild(item);
+      string += item;
     });
+    this.element.innerHTML = string;
+    this.createElements();
     this.buildCharts();
   }
 }

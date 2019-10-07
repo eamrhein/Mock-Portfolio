@@ -1,4 +1,4 @@
-// creates Date object from pai calls;
+// creates Date object from api calls;
 export const parseStockPrices = (stockData) => {
   const prices = [];
   for (let i = 0; i < stockData.length; i++) {

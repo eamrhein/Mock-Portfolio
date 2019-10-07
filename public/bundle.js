@@ -75,13 +75,17 @@ module.exports = [{"Symbol":"AAIT","Company Name":"iShares MSCI All Country Asia
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dom__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stocksymbols_json__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stocksymbols_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__stocksymbols_json__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__portfolio__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stocksymbols_json__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stocksymbols_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__stocksymbols_json__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_index_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_api_calls__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_dom__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_portfolio__ = __webpack_require__(26);
 
 
 
+
+// Load up components
 
 
 document.addEventListener('DOMContentLoaded', e => {
@@ -107,51 +111,312 @@ document.addEventListener('DOMContentLoaded', e => {
     shares: 10,
     name: 'Amazon.com Inc.'
   }];
-  const initialStocks = new __WEBPACK_IMPORTED_MODULE_2__portfolio__["a" /* default */](stocks);
-  // INPUT EVENTS
-  const search = document.getElementById('search-box');
-  Object(__WEBPACK_IMPORTED_MODULE_0__dom__["a" /* autocomplete */])(search, __WEBPACK_IMPORTED_MODULE_1__stocksymbols_json___default.a);
-
-  const button = document.getElementById('add-stock');
-  button.addEventListener('click', e => {
-    if (stocks.length > 6) {
-      alert('can only add up to 6 stocks');
-    }
-    if (stocks.every(stock => stock.key !== search.value)) {
-      console.log(b);
-    }
+  __WEBPACK_IMPORTED_MODULE_1__store_index_js__["a" /* default */].dispatch('fetchAllStockSymbols', __WEBPACK_IMPORTED_MODULE_0__stocksymbols_json___default.a);
+  window.store = __WEBPACK_IMPORTED_MODULE_1__store_index_js__["a" /* default */];
+  Object(__WEBPACK_IMPORTED_MODULE_2__util_api_calls__["a" /* fetchAllHist */])(stocks).then(history => {
+    __WEBPACK_IMPORTED_MODULE_1__store_index_js__["a" /* default */].dispatch('fetchAllhistory', history);
+  }).then(() => {
+    Object(__WEBPACK_IMPORTED_MODULE_2__util_api_calls__["b" /* fetchAllInfo */])(stocks).then(info => {
+      __WEBPACK_IMPORTED_MODULE_1__store_index_js__["a" /* default */].dispatch('fetchAllinfo', info);
+    }).then(() => {
+      const search = document.getElementById('search-box');
+      Object(__WEBPACK_IMPORTED_MODULE_3__util_dom__["a" /* autocomplete */])(search, __WEBPACK_IMPORTED_MODULE_0__stocksymbols_json___default.a);
+      const porfolio = new __WEBPACK_IMPORTED_MODULE_4__components_portfolio__["a" /* default */]();
+      porfolio.render();
+    });
   });
 });
 
 /***/ }),
-/* 2 */
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = fetchdata;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mutations_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store_js__ = __webpack_require__(14);
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_3__store_js__["a" /* default */]({
+  actions: __WEBPACK_IMPORTED_MODULE_0__actions_js__["a" /* default */],
+  mutations: __WEBPACK_IMPORTED_MODULE_1__mutations_js__["a" /* default */],
+  state: __WEBPACK_IMPORTED_MODULE_2__state_js__["a" /* default */]
+}));
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  fetchAllStockSymbols(context, payload) {
+    context.commit('fetchAllStockSymbols', payload);
+  },
+  fetchAllinfo(context, payload) {
+    context.commit('fetchAllinfo', payload);
+  },
+  fetchAllhistory(context, payload) {
+    context.commit('fetchAllhistory', payload);
+  }
+});
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  fetchAllStockSymbols(state, payload) {
+    state.symbols = payload;
+    return state;
+  },
+  fetchAllinfo(state, payload) {
+    state.company = payload;
+    return state;
+  },
+  fetchAllhistory(state, payload) {
+    state.history = payload;
+    return state;
+  }
+});
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  symbols: {},
+  company: {},
+  history: {}
+});
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_pubsub_js__ = __webpack_require__(15);
 /* eslint-disable require-jsdoc */
+// Simple Publish Subscribe State Management
+// Taken from https://github.com/hankchizljaw/vanilla-js-state-management/
 
-const apikeys = __webpack_require__(3);
 
-async function fetchdata(syms) {
+class Store {
+  constructor(params) {
+    const self = this;
+
+    self.actions = {};
+    self.mutations = {};
+    self.state = {};
+
+    self.status = 'resting';
+
+    self.events = new __WEBPACK_IMPORTED_MODULE_0__lib_pubsub_js__["a" /* default */]();
+
+    if (params.hasOwnProperty('actions')) {
+      self.actions = params.actions;
+    }
+
+    if (params.hasOwnProperty('mutations')) {
+      self.mutations = params.mutations;
+    }
+
+    self.state = new Proxy(params.state || {}, {
+      set: function (state, key, value) {
+        state[key] = value;
+
+        console.log(`stateChange: ${key}: ${value}`);
+
+        self.events.publish('stateChange', self.state);
+
+        if (self.status !== 'mutation') {
+          console.warn(`You should use a mutation to set ${key}`);
+        }
+
+        self.status = 'resting';
+
+        return true;
+      }
+    });
+  }
+
+  dispatch(actionKey, payload) {
+    const self = this;
+
+    if (typeof self.actions[actionKey] !== 'function') {
+      console.error(`Action "${actionKey} doesn't exist.`);
+      return false;
+    }
+
+    console.groupCollapsed(`ACTION: ${actionKey}`);
+
+    self.status = 'action';
+
+    self.actions[actionKey](self, payload);
+
+    console.groupEnd();
+
+    return true;
+  }
+
+  commit(mutationKey, payload) {
+    const self = this;
+
+    if (typeof self.mutations[mutationKey] !== 'function') {
+      console.log(`Mutation "${mutationKey}" doesn't exist`);
+      return false;
+    }
+
+    self.status = 'mutation';
+
+    const newState = self.mutations[mutationKey](self.state, payload);
+
+    self.state = Object.assign(self.state, newState);
+
+    return true;
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Store;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* eslint-disable require-jsdoc */
+// Simple Publish Subscribe State Management
+// Taken from https://github.com/hankchizljaw/vanilla-js-state-management/
+class PubSub {
+  constructor() {
+    this.events = {};
+  }
+
+  subscribe(event, callback) {
+    const self = this;
+
+    if (!self.events.hasOwnProperty(event)) {
+      self.events[event] = [];
+    }
+
+    return self.events[event].push(callback);
+  }
+
+  publish(event, data = {}) {
+    const self = this;
+
+    if (!self.events.hasOwnProperty(event)) {
+      return [];
+    }
+
+    return self.events[event].map(callback => callback(data));
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = PubSub;
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_store_js__ = __webpack_require__(14);
+/* eslint-disable require-jsdoc */
+// Simple Publish Subscribe State Management
+// Taken from https://github.com/hankchizljaw/vanilla-js-state-management/
+
+
+class Component {
+  constructor(props = {}) {
+    const self = this;
+
+    this.render = this.render || function () {};
+
+    if (props.store instanceof __WEBPACK_IMPORTED_MODULE_0__store_store_js__["a" /* default */]) {
+      props.store.events.subscribe('stateChange', () => self.render());
+    }
+
+    if (props.hasOwnProperty('element')) {
+      this.element = props.element;
+    }
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Component;
+
+
+/***/ }),
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = fetchAllHist;
+/* harmony export (immutable) */ __webpack_exports__["b"] = fetchAllInfo;
+/* unused harmony export fetchHist */
+/* unused harmony export fetchCompanyInfo */
+/* eslint-disable require-jsdoc */
+const apikeys = __webpack_require__(21);
+
+async function fetchAllHist(syms) {
   try {
     const history = await Promise.all(syms.map(async sym => await (await fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/chart/2y?token=${apikeys.iexkey}&chartInterval=14`)).json()));
-    return history;
+    const result = {};
+    syms.forEach((sym, i) => {
+      result[sym.sym] = history[i];
+    });
+    return result;
   } catch (err) {
     console.log(err);
   }
 };
 
-const addCompanyInfo = sym => {
-  return fetch(`https://cloud.iexapis.com/stable/stock/${sym}/company?token=${apikeys.iexkey}`).then(res => {
-    return res.json();
-  });
-};
-/* unused harmony export addCompanyInfo */
+async function fetchAllInfo(syms) {
+  try {
+    const info = await Promise.all(syms.map(async sym => await (await fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/company?token=${apikeys.iexkey}`)).json()));
+    const res = {};
+    syms.forEach((sym, i) => {
+      res[sym.sym] = {
+        shares: sym.shares,
+        info: info[i]
+      };
+    });
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
+async function fetchHist(sym) {
+  const hist = await fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/chart/2y?token=${apikeys.iexkey}&chartInterval=14`).json();
+  const res = {};
+  res[sym.sym] = hist;
+  return res;
+}
+
+async function fetchCompanyInfo(sym) {
+  const info = await fetch(`https://cloud.iexapis.com/stable/stock/${sym}/company?token=${apikeys.iexkey}`).json();
+  const res = {};
+  res[sym.sym] = info;
+  return res;
+};
 
 /***/ }),
-/* 3 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -161,43 +426,54 @@ module.exports = {
 // iexkey: 'pk_9c1ed2a08a2c4af2be14db7a6c97d602',
 
 /***/ }),
-/* 4 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-// creates Date object from pai calls;
-const parseStockPrices = stockData => {
-  const prices = [];
-  for (let i = 0; i < stockData.length; i++) {
-    const day = stockData[i];
-    const parsedStockDay = {
-      date: new Date(day.date),
-      high: day.high,
-      low: day.low,
-      open: day.open,
-      close: day.close,
-      volume: day.volume
-    };
-    prices.push(parsedStockDay);
-  }
-  return prices;
-};
-/* harmony export (immutable) */ __webpack_exports__["b"] = parseStockPrices;
-
-// combines multiple api queries and sums them;
-const combineStockHistories = histories => histories.reduce(history => history.map(quoteObj => {
-  Object.entries(quoteObj).forEach(([key, val]) => {
-    if (key !== 'date') {
-      quoteObj[key] = (quoteObj[key] || 0) + val;
+/* eslint-disable no-invalid-this */
+/* eslint-disable max-len */
+const autocomplete = (inp, arr) => {
+  inp.addEventListener('input', function (e) {
+    const val = this.value;
+    closeAllLists();
+    if (!val) {
+      return false;
+    }
+    const a = document.getElementById('autolist');
+    a.innerHTML = '';
+    for (let i = 0; i < arr.length; i++) {
+      if (a.children.length > 20) return;
+      if (arr[i]['Symbol'].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+        const b = document.createElement('option');
+        b.setAttribute('class', 'autocomplete-items');
+        b.value = arr[i]['Symbol'];
+        b.innerHTML = '<strong>' + arr[i]['Company Name'].substr(0, val.length) + '</strong>';
+        b.innerHTML += arr[i]['Company Name'].substr(val.length);
+        b.addEventListener('click', function (e) {
+          inp.value = this.getElementsByTagName('input')[0].value;
+          closeAllLists();
+        });
+        if (a.children) {
+          a.appendChild(b);
+        }
+      }
     }
   });
-  return quoteObj;
-}));
-/* harmony export (immutable) */ __webpack_exports__["a"] = combineStockHistories;
+  const closeAllLists = elmnt => {
+    const x = document.getElementsByClassName('autocomplete-items');
+    for (let i = 0; i < x.length; i++) {
+      x[i].parentNode.removeChild(x[i]);
+    }
+  };
+  document.addEventListener('click', function (e) {
+    closeAllLists(e.target);
+  });
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = autocomplete;
 
 
 /***/ }),
-/* 5 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -278,9 +554,9 @@ const createLineChart = (element, parsedData) => {
     return yScale(d['average']);
   }).curve(d3.curveBasis);
   svg.append('path').data([data]) // binds data to the line
-  .style('fill', 'none').attr('id', 'priceChart').attr('stroke', '#003f5c').attr('stroke-width', '3').attr('d', line);
+  .style('fill', 'none').attr('id', 'priceChart').attr('stroke', '#ff4081').attr('stroke-width', '3').attr('d', line);
   const movingAverageData = movingAverage(data, 52);
-  svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine').attr('stroke', '#ffa600').attr('stroke-width', '3').attr('d', movingAverageLine);
+  svg.append('path').data([movingAverageData]).style('fill', 'none').attr('id', 'movingAverageLine').attr('stroke', '#FFC04E').attr('stroke-width', '3').attr('d', movingAverageLine);
   const focus = svg.append('g').attr('class', 'focus').style('display', 'none');
 
   focus.append('circle').attr('r', 4.5);
@@ -356,7 +632,7 @@ const createLineChart = (element, parsedData) => {
     if (i === 0) {
       return '#488f31';
     } else {
-      return volData[i - 1].close > d.close ? '#de425b' : '#488f31';
+      return volData[i - 1].close > d.close ? '#FC476B' : '#F9F871';
     }
   }).attr('width', 10).attr('height', d => {
     return height - yVolumeScale(d['volume']);
@@ -366,7 +642,7 @@ const createLineChart = (element, parsedData) => {
 
 
 /***/ }),
-/* 6 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -376,12 +652,12 @@ const createPieChart = (element, dataset) => {
   const height = d3.select(element).style('height').slice(0, -2) * 0.95;
   const radius = Math.min(width, height) / 2;
 
-  const legendRectSize = 13;
+  const legendRectSize = 16;
   const legendSpacing = 10;
 
   const color = d3.scaleOrdinal(['#7B1FA2', '#CD128A', '#FC476B', '#FF8452', '#FFC04E', '#F9F871']);
 
-  const svg = d3.select(element).append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+  const svg = d3.select(element).append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 3 + ',' + height / 2 + ')');
   const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
   const pie = d3.pie().value(function (d) {
@@ -428,8 +704,8 @@ const createPieChart = (element, dataset) => {
 
   const legend = svg.selectAll('.legend').data(color.domain()).enter().append('g').attr('class', 'legend').attr('transform', function (d, i) {
     const height = legendRectSize + legendSpacing;
-    const offset = height * color.domain().length / 2;
-    const horz = 26 * legendRectSize;
+    const offset = height * color.domain().length / 1.5;
+    const horz = 16 * legendRectSize;
     const vert = i * height - offset;
     return 'translate(' + horz + ',' + vert + ')';
   });
@@ -473,113 +749,113 @@ const createPieChart = (element, dataset) => {
 
 
 /***/ }),
-/* 7 */,
-/* 8 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_calls__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__linechart__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__piechart__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__parsing__ = __webpack_require__(4);
+// creates Date object from pai calls;
+const parseStockPrices = stockData => {
+  const prices = [];
+  for (let i = 0; i < stockData.length; i++) {
+    const day = stockData[i];
+    const parsedStockDay = {
+      date: new Date(day.date),
+      high: day.high,
+      low: day.low,
+      open: day.open,
+      close: day.close,
+      volume: day.volume
+    };
+    prices.push(parsedStockDay);
+  }
+  return prices;
+};
+/* harmony export (immutable) */ __webpack_exports__["c"] = parseStockPrices;
+
+// combines multiple api queries and sums them;
+const combineStockHistories = histories => Object.values(histories).reduce(history => history.map(quoteObj => {
+  Object.entries(quoteObj).forEach(([key, val]) => {
+    if (key !== 'date') {
+      quoteObj[key] = (quoteObj[key] || 0) + val;
+    }
+  });
+  return quoteObj;
+}));
+/* harmony export (immutable) */ __webpack_exports__["a"] = combineStockHistories;
+
+
+const parsePieGraph = data => {
+  const res = [];
+  Object.values(data).forEach(value => {
+    res.push({
+      sym: value.info.companyName,
+      shares: value.shares,
+      name: value.info.companyName
+    });
+  });
+  return res;
+};
+/* harmony export (immutable) */ __webpack_exports__["b"] = parsePieGraph;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_component_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_index_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_parsing__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__linechart__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__piechart__ = __webpack_require__(24);
 /* eslint-disable require-jsdoc */
 
 
 
 
-class Portfolio {
-  constructor(stocks) {
-    this.stocks = stocks;
-    this.buildCharts(stocks);
-    this.createStockList(stocks);
+
+
+class Portfolio extends __WEBPACK_IMPORTED_MODULE_0__lib_component_js__["a" /* default */] {
+  constructor() {
+    super({
+      store: __WEBPACK_IMPORTED_MODULE_1__store_index_js__["a" /* default */] || {},
+      element: document.querySelector('#stocklist')
+    });
   }
-  createStockList(stocks) {
-    const stockList = document.getElementById('stocklist');
-    console.log(stockList);
-    stocks.forEach(stock => {
+
+  buildCharts() {
+    const combinedHistory = Object(__WEBPACK_IMPORTED_MODULE_2__util_parsing__["a" /* combineStockHistories */])(__WEBPACK_IMPORTED_MODULE_1__store_index_js__["a" /* default */].state.history);
+    Object(__WEBPACK_IMPORTED_MODULE_3__linechart__["a" /* createLineChart */])('#line-chart', Object(__WEBPACK_IMPORTED_MODULE_2__util_parsing__["c" /* parseStockPrices */])(combinedHistory));
+    Object(__WEBPACK_IMPORTED_MODULE_4__piechart__["a" /* createPieChart */])('#pie-chart', Object(__WEBPACK_IMPORTED_MODULE_2__util_parsing__["b" /* parsePieGraph */])(__WEBPACK_IMPORTED_MODULE_1__store_index_js__["a" /* default */].state.company));
+  }
+
+  render() {
+    const { company } = __WEBPACK_IMPORTED_MODULE_1__store_index_js__["a" /* default */].state;
+    const companyList = Object.keys(company).map(key => {
+      const li = document.createElement('li');
       const div = document.createElement('div');
       const h4 = document.createElement('h4');
-      const span = document.createElement('span');
-      const btnA = document.createElement('button');
-      const btnS = document.createElement('button');
-      const bdiv = document.createElement('div');
-      h4.innerText = stock.name;
-      span.innerText = stock.shares + ' Shares';
-      btnA.classList.add('plus-btn');
-      btnS.classList.add('minus-btn');
-      btnA.innerText = '+';
-      btnS.innerText = '-';
-      div.classList.add('stocklist-item');
+      const shares = document.createElement('li');
+      const btnP = document.createElement('button');
+      const btnM = document.createElement('button');
+      h4.innerText = company[key].info.companyName;
+      shares.innerText = company[key].shares + ' Shares';
+      btnP.innerText = '+';
+      btnM.innerText = '-';
       div.appendChild(h4);
-      div.appendChild(span);
-      bdiv.appendChild(btnA);
-      bdiv.appendChild(btnS);
-      div.appendChild(bdiv);
-      stockList.appendChild(div);
+      div.appendChild(shares);
+      div.appendChild(btnP);
+      div.appendChild(btnM);
+      li.appendChild(div);
+      return li;
     });
-  }
-  buildCharts(stocks) {
-    Object(__WEBPACK_IMPORTED_MODULE_0__api_calls__["a" /* fetchdata */])(stocks).then(histories => {
-      const combinedHistory = Object(__WEBPACK_IMPORTED_MODULE_3__parsing__["a" /* combineStockHistories */])(histories);
-      Object(__WEBPACK_IMPORTED_MODULE_2__piechart__["a" /* createPieChart */])('#pie-chart', this.stocks);
-      Object(__WEBPACK_IMPORTED_MODULE_1__linechart__["a" /* createLineChart */])('#line-chart', Object(__WEBPACK_IMPORTED_MODULE_3__parsing__["b" /* parseStockPrices */])(combinedHistory));
+    companyList.forEach(item => {
+      this.element.appendChild(item);
     });
+    this.buildCharts();
   }
-  addShare(sym) {
-    this.stocks[sym]++;
-  }
-  removeShare(sym) {
-    this.stocks[sym]--;
-  }
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Portfolio);
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* eslint-disable no-invalid-this */
-/* eslint-disable max-len */
-const autocomplete = (inp, arr) => {
-  inp.addEventListener('input', function (e) {
-    const val = this.value;
-    closeAllLists();
-    if (!val) {
-      return false;
-    }
-    const a = document.getElementById('autolist');
-    a.innerHTML = '';
-    for (let i = 0; i < arr.length; i++) {
-      if (a.children.length > 20) return;
-      if (arr[i]['Symbol'].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-        const b = document.createElement('option');
-        b.setAttribute('class', 'autocomplete-items');
-        b.value = arr[i]['Symbol'];
-        b.innerHTML = '<strong>' + arr[i]['Company Name'].substr(0, val.length) + '</strong>';
-        b.innerHTML += arr[i]['Company Name'].substr(val.length);
-        b.addEventListener('click', function (e) {
-          inp.value = this.getElementsByTagName('input')[0].value;
-          closeAllLists();
-        });
-        if (a.children) {
-          a.appendChild(b);
-        }
-      }
-    }
-  });
-  const closeAllLists = elmnt => {
-    const x = document.getElementsByClassName('autocomplete-items');
-    for (let i = 0; i < x.length; i++) {
-      x[i].parentNode.removeChild(x[i]);
-    }
-  };
-  document.addEventListener('click', function (e) {
-    closeAllLists(e.target);
-  });
-};
-/* harmony export (immutable) */ __webpack_exports__["a"] = autocomplete;
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Portfolio;
 
 
 /***/ })

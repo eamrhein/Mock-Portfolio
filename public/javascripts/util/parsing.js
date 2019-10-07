@@ -17,7 +17,7 @@ export const parseStockPrices = (stockData) => {
 };
 // combines multiple api queries and sums them;
 export const combineStockHistories = (histories) => (
-  histories.reduce((history) => (
+  Object.values(histories).reduce((history) => (
     history.map(((quoteObj) => {
       Object.entries(quoteObj).forEach(([key, val]) => {
         if (key !== 'date') {
@@ -28,4 +28,16 @@ export const combineStockHistories = (histories) => (
     }))
   ))
 );
+
+export const parsePieGraph = (data) => {
+  const res = [];
+  Object.values(data).forEach((value) => {
+    res.push({
+      sym: value.info.companyName,
+      shares: value.shares,
+      name: value.info.companyName,
+    });
+  });
+  return res;
+};
 

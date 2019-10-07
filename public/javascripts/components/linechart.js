@@ -111,7 +111,7 @@ export const createLineChart = (element, parsedData) => {
       .data([data]) // binds data to the line
       .style('fill', 'none')
       .attr('id', 'priceChart')
-      .attr('stroke', '#003f5c')
+      .attr('stroke', '#ff4081')
       .attr('stroke-width', '3')
       .attr('d', line);
   const movingAverageData = movingAverage(data, 52);
@@ -120,7 +120,7 @@ export const createLineChart = (element, parsedData) => {
       .data([movingAverageData])
       .style('fill', 'none')
       .attr('id', 'movingAverageLine')
-      .attr('stroke', '#ffa600')
+      .attr('stroke', '#FFC04E')
       .attr('stroke-width', '3')
       .attr('d', movingAverageLine);
   const focus = svg
@@ -250,7 +250,7 @@ export const createLineChart = (element, parsedData) => {
         if (i === 0) {
           return '#488f31';
         } else {
-          return volData[i - 1].close > d.close ? '#de425b' : '#488f31';
+          return volData[i - 1].close > d.close ? '#FC476B' : '#F9F871';
         }
       })
       .attr('width', 10)

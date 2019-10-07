@@ -1,7 +1,9 @@
-
-import {autocomplete} from './dom';
 import stockList from './stocksymbols.json';
-import Portfolio from './portfolio';
+import store from './store/index.js';
+import {fetchAllHist, fetchAllInfo} from './util/api-calls';
+import {autocomplete} from './util/dom';
+// Load up components
+import Portfolio from './components/portfolio';
 
 document.addEventListener('DOMContentLoaded', (e) => {
   // DEFALT SETTINGS
@@ -32,18 +34,20 @@ document.addEventListener('DOMContentLoaded', (e) => {
       name: 'Amazon.com Inc.',
     },
   ];
-  const initialStocks = new Portfolio(stocks);
-  // INPUT EVENTS
-  const search = document.getElementById('search-box');
-  autocomplete(search, stockList);
-
-  const button = document.getElementById('add-stock');
-  button.addEventListener('click', (e) => {
-    if (stocks.length > 6) {
-      alert('can only add up to 6 stocks');
-    }
-    if (stocks.every((stock) => stock.key !== search.value)) {
-      console.log(b);
-    }
-  });
+  store.dispatch('fetchAllStockSymbols', stockList);
+  window.store = store;
+  fetchAllHist(stocks).then((history) => {
+    store.dispatch('fetchAllhistory', history);
+  }).then(() => {
+    fetchAllInfo(stocks).then((info) => {
+      store.dispatch('fetchAllinfo', info);
+    }).then(() => {
+      const search = document.getElementById('search-box');
+      autocomplete(search, stockList);
+      const porfolio = new Portfolio();
+      porfolio.render();
+    });
+  }
+  );
 });
+

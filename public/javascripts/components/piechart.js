@@ -4,7 +4,7 @@ export const createPieChart = (element, dataset) => {
   const height = d3.select(element).style('height').slice(0, -2) * 0.95;
   const radius = Math.min(width, height) / 2;
 
-  const legendRectSize = 13;
+  const legendRectSize = 16;
   const legendSpacing = 10;
 
   const color = d3.scaleOrdinal(
@@ -16,7 +16,7 @@ export const createPieChart = (element, dataset) => {
       .attr('width', width)
       .attr('height', height)
       .append('g')
-      .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
+      .attr('transform', 'translate(' + (width / 3) + ',' + (height / 2) + ')');
   const arc = d3.arc()
       .innerRadius(0)
       .outerRadius(radius);
@@ -85,8 +85,8 @@ export const createPieChart = (element, dataset) => {
       .attr('class', 'legend')
       .attr('transform', function(d, i) {
         const height = legendRectSize + legendSpacing;
-        const offset = height * color.domain().length / 2;
-        const horz = 26 * legendRectSize;
+        const offset = height * color.domain().length / 1.5;
+        const horz = 16 * legendRectSize;
         const vert = i * height - offset;
         return 'translate(' + horz + ',' + vert + ')';
       });

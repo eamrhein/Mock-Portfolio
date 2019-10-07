@@ -13,19 +13,21 @@ export default class Portfolio extends Component {
   constructor() {
     super({
       store: store,
-      element: document.querySelector('#stocklist'),
+      element: document.getElementsByClassName('sharesN'),
     });
+    this.createElements();
+    this.buildCharts();
   }
   addShare(sym) {
     store.dispatch('addShare', sym);
-    d3.select('#pie-chart').remove();
-    this.buildCharts();
+    d3.select('#pie-chart').select('svg').remove();
+    createPieChart('#pie-chart', parsePieGraph(store.state.company));
   }
 
   minusShare(sym) {
     store.dispatch('minusShare', sym);
     d3.select('#pie-chart').select('svg').remove();
-    this.buildCharts();
+    createPieChart('#pie-chart', parsePieGraph(store.state.company));
   }
 
   buildCharts() {
@@ -53,37 +55,11 @@ export default class Portfolio extends Component {
 
   render() {
     const {company} = store.state;
-    let string = '';
-    const companyList = Object.keys(company)
-        .map((key) => {
-          return (
-            `
-                <li>
-                  <div>
-                    <h4>${company[key].info.companyName}</h4>
-                    <li>${company[key].shares } Shares</li>
-                    <button
-                      id=${key}
-                      class='plus-btn'
-                    >
-                     +
-                    </button>
-                    <button
-                      id=${key}
-                      class='minus-btn'
-                    >
-                     -
-                    </button>
-                  </div>
-                </li>
-            `
-          );
-        });
-    companyList.forEach((item) => {
-      string += item;
-    });
-    this.element.innerHTML = string;
-    this.createElements();
-    this.buildCharts();
+    const companyList = Object.keys(company);
+    let i= 0;
+    for (const li of this.element) {
+      li.innerHTML = `${company[companyList[i]].shares}`;
+      i++;
+    }
   }
 }

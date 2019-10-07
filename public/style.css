@@ -52,22 +52,6 @@ section {
   height: 21.5vh;
   background: linear-gradient(90deg, #303f9f, #7b1fa2);
 }
-.plus-btn, .minus-btn {
-    margin: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    background-color: #fff;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-    vertical-align: middle;
-    overflow: hidden;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
-    border-radius: 50%;
-    border: none;
-}
-
 .stocklist-item {
   text-align: center;
   vertical-align: center;
@@ -132,7 +116,7 @@ section {
   grid-row: 4/6;
 }
 
-#stocklist > li > div > button {
+.plus-btn, .minus-btn {
   margin-right: 5px;
   font-weight: bold;
   cursor: pointer;
@@ -211,84 +195,5 @@ rect.disabled {
 #company-header {
   text-align: center;
 }
-@media only screen and (max-width: 1000px) {
-  #line-chart {
-  justify-content: flex-end;
-  grid-column: 7/18;
-  grid-row-start: 3;
-  grid-row-end: 10;
-}
 
-  #pie-graph {
-  flex-direction: column;
-  grid-column: 7/18;
-  grid-row-start: 10;
-  grid-row-end: 18;
-}
-
-#stock-table {
-  grid-column: 3/7;
-  grid-row-start: 3;
-  grid-row-end:  35 span;
-}
-#company{
-  grid-column: 7/18;
-  grid-row-start: 18;
-  grid-row-end: 20 span;
-}
-
-}
-
-@media only screen and (max-width: 700px) {
- #line-chart {
-  justify-content: flex-end;
-  grid-column: 3/18;
-  grid-row-start: 3;
-  grid-row-end: 10;
-}
-
-  #pie-graph {
-  flex-direction: column;
-  grid-column: 3/18;
-  grid-row-start: 10;
-  grid-row-end: 18;
-}
-
-#stock-table {
-  grid-column: 3/18;
-  grid-row-start: 3;
-  grid-row-end:  10;
-}
-#company{
-  grid-column: 3/18;
-  grid-row-start: 18;
-  grid-row-end: 20 span;
-}
-}
-@media only screen and (max-width: 400px) {
- #line-chart {
-  justify-content: flex-end;
-  grid-column: 3/18;
-  grid-row-start: 3;
-  grid-row-end: 10;
-}
-
-  #pie-graph {
-  flex-direction: column;
-  grid-column: 3/18;
-  grid-row-start: 10;
-  grid-row-end: 18;
-}
-
-#stock-table {
-  grid-column: 3/18;
-  grid-row-start: 3;
-  grid-row-end:  10;
-}
-#company{
-  grid-column: 3/18;
-  grid-row-start: 18;
-  grid-row-end: 20 span;
-}
-}
 

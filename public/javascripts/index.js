@@ -34,19 +34,19 @@ document.addEventListener('DOMContentLoaded', (e) => {
       name: 'Amazon.com Inc.',
     },
   ];
-  // store.dispatch('fetchAllStockSymbols', stockList);
-  // fetchAllHist(stocks).then((history) => {
-  //   store.dispatch('fetchAllhistory', history);
-  // }).then(() => {
-  //   fetchAllInfo(stocks).then((info) => {
-  //     store.dispatch('fetchAllinfo', info);
-  //   }).then(() => {
-  //     const search = document.getElementById('search-box');
-  //     autocomplete(search, stockList);
-  //     const porfolio = new Portfolio();
-  //     porfolio.render();
-  //   });
-  // }
-  // );
+  store.dispatch('fetchAllStockSymbols', stockList);
+  fetchAllHist(stocks).then((history) => {
+    store.dispatch('fetchAllhistory', history);
+  }).then(() => {
+    fetchAllInfo(stocks).then((info) => {
+      store.dispatch('fetchAllinfo', info);
+    }).then(() => {
+      const search = document.getElementById('search-box');
+      autocomplete(search, stockList);
+      const porfolio = new Portfolio();
+      porfolio.render();
+    });
+  }
+  );
 });
 

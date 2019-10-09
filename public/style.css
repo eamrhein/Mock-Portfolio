@@ -253,12 +253,10 @@ label{
   }
 }
 footer {
-  margin-top: 100;
-  position: absolute;
   top: 96%;
-  right: 36%;
-  text-align: center;
-  overflow: hidden;
+  position: fixed;
+  left: 48%;
+  transform: translate(-48%, 0);
 }
 footer a {
   text-decoration: none;

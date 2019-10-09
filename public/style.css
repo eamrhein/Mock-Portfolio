@@ -253,9 +253,12 @@ label{
   }
 }
 footer {
+  margin-top: 100;
+  position: absolute;
+  top: 96%;
+  right: 36%;
   text-align: center;
-  grid-row: 19/20;
-  grid-column: 5/16;
+  overflow: hidden;
 }
 footer a {
   text-decoration: none;

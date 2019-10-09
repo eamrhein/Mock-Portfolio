@@ -21,4 +21,8 @@ export default {
     }
     return state;
   },
+  closeModal(state) {
+    state.modal = false;
+    return state;
+  },
 };

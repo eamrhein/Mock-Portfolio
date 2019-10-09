@@ -14,4 +14,7 @@ export default {
   minusShare(context, payload) {
     context.commit('minusShare', payload);
   },
+  closeModal(context) {
+    context.commit('closeModal');
+  },
 };

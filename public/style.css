@@ -10,6 +10,9 @@ body {
   width: calc(100vw - 5rem);
   height: calc(100vh - 5rem);
 }
+em {
+  font-weight: bolder;
+}
 h1, h2, h3 {
   font-family: 'Libre Baskerville', serif;
 }
@@ -45,6 +48,34 @@ section {
   color: #404040;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
   overflow: hidden;
+}
+dialog {
+  word-break: keep-all;
+  animation: appear 350ms ease-in 1;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  animation: appear 350ms ease-in 1;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 15px rgba(0, 0, 0, 0.2);
+  padding: 2.5%;
+  border-radius: 2px;
+  border: none;
+  z-index: 2;
+  text-indent: 0.5rem;
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  background:  rgba(255, 255, 255, 0.8);
+  height: 33%;
+  width: 44%;
+}
+dialog h3 {
+  text-align: center;
+}
+
+dialog div {
+  margin-left: auto;
 }
 .headercard {
   display: fixed;
@@ -196,4 +227,40 @@ rect.disabled {
   text-align: center;
 }
 
+#toggle{
+  visibility: hidden;
+  opacity: 0;
+  position: relative;
+  z-index: -1;
+}
 
+#toggle:checked ~ dialog {
+  display: none;
+}
+
+label{
+  cursor: pointer;
+  font-weight: bold;
+  background: #ff4081;
+  color: white;
+  padding: .5em 1em;
+  border-radius: 2px;
+}
+@keyframes appear {
+  0%{
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+footer {
+  margin-top: 100;
+  position: absolute;
+  top: 96%;
+  right: 36%;
+  text-align: center;
+  overflow: hidden;
+}
+footer a {
+  text-decoration: none;
+  color: #000000;
+}

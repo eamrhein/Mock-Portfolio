@@ -1,4 +1,5 @@
 // creates Date object from api calls;
+import store from '../store/index';
 export const parseStockPrices = (stockData) => {
   const prices = [];
   for (let i = 0; i < stockData.length; i++) {
@@ -32,9 +33,11 @@ export const combineStockHistories = (histories) => (
 export const parsePieGraph = (data) => {
   const res = [];
   Object.values(data).forEach((value) => {
+    const stockHistory = store.state.history[value.info.symbol];
+    const lastDate = stockHistory.length - 1;
     res.push({
       sym: value.info.companyName,
-      shares: value.shares,
+      value: parseInt(value.shares * stockHistory[lastDate].close),
       name: value.info.companyName,
     });
   });

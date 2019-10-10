@@ -4,10 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/svg" href="./money.png">
     <title>Mock Portfolio</title>
     <link href="https://fonts.googleapis.com/css?family=Kreon|Libre+Baskerville|Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="style.css">
+    <script src="https://use.fontawesome.com/a0b4260173.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script type="text/javascript" src="./bundle.js"></script>
   </head>
@@ -31,6 +33,23 @@
         </div>
       </div>
     </nav>
+    <input type="checkbox" id="toggle">
+    <dialog>
+      <h3>Greetings!</h3>
+      <p>
+        Welcome to Mock-Portfolio, a stock research application that
+        lets people see how there stocks would fare over the last<em>
+          two-years </em>
+        Depending on the number of shares you have in each company
+        the line graph and pie chart will update, showing you how your stocks have faired over time.
+      </p>
+      <p>
+        Also Click on the search box to look up company information.
+      </p>
+      <div>
+        <label for="toggle">close overlay</label>
+      </div>
+    </dialog>
     <section id="stocklist">
       <div>
         <h4>Tesla Inc.</h4>
@@ -67,5 +86,31 @@
     </section>
     <section id="pie-chart">
     </section>
+    <footer>
+      <span>
+        <a href="https://www.github.com/eamrhein">
+           Github
+        </a>
+      </span>
+      <span>
+
+        <a href="https://www.linkedin.com/in/eamrhein/">LinkedIn</a>
+      </span>
+      <span>
+        <a href="https://www.twitter.com/eamrhein">
+          Twitter
+        </a>
+      </span>
+      <span>
+        <a href="https://ericamrhein.com">
+        Website
+        </a>
+      </span>
+      <span>
+        <a href="mailto:eamrhein@protonmail.ch">
+          Email
+        </a>
+      </span>
+    </footer>
   </body>
 </html>

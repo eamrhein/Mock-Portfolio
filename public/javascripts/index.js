@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
     },
   ];
   store.dispatch('fetchAllStockSymbols', stockList);
-  window.store = store;
   fetchAllHist(stocks).then((history) => {
     store.dispatch('fetchAllhistory', history);
   }).then(() => {

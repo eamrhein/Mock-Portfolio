@@ -23,7 +23,7 @@ export const createPieChart = (element, dataset) => {
 
   const pie = d3.pie()
       .value(function(d) {
-        return d.shares;
+        return d.value;
       })
       .sort(null);
 
@@ -35,13 +35,13 @@ export const createPieChart = (element, dataset) => {
       .attr('class', 'symbol');
 
   tooltip.append('div')
-      .attr('class', 'shares');
+      .attr('class', 'value');
 
   tooltip.append('div')
       .attr('class', 'percent');
 
   dataset.forEach(function(d) {
-    d.shares = +d.shares;
+    d.value = +d.value;
     d.enabled = true;
   });
 
@@ -60,11 +60,11 @@ export const createPieChart = (element, dataset) => {
 
   path.on('mouseover', function(d) {
     const total = d3.sum(dataset.map(function(d) {
-      return (d.enabled) ? d.shares : 0;
+      return (d.enabled) ? d.value : 0;
     }));
-    const percent = Math.round(1000 * d.data.shares / total) / 10;
+    const percent = Math.round(1000 * d.data.value / total) / 10;
     tooltip.select('.symbol').html(d.data.sym);
-    tooltip.select('.shares').html(d.data.shares + ' shares');
+    tooltip.select('.value').html('$' + d.data.value);
     tooltip.select('.percent').html(percent + '%');
     tooltip.style('display', 'block');
   });
@@ -113,7 +113,7 @@ export const createPieChart = (element, dataset) => {
 
         pie.value(function(d) {
           if (d.sym === sym) d.enabled = enabled;
-          return (d.enabled) ? d.shares : 0;
+          return (d.enabled) ? d.value : 0;
         });
 
         path = path.data(pie(dataset));

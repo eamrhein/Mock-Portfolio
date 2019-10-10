@@ -58,7 +58,7 @@ export default class Portfolio extends Component {
     const companyList = Object.keys(company);
     let i= 0;
     for (const li of this.element) {
-      li.innerHTML = `${company[companyList[i]].shares}`;
+      li.innerHTML = `${company[companyList[i]].shares} shares`;
       i++;
     }
   }

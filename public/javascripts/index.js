@@ -15,22 +15,22 @@ document.addEventListener('DOMContentLoaded', (e) => {
     },
     {
       sym: 'GOOG',
-      shares: 30,
+      shares: 4,
       name: 'Google Inc.',
     },
     {
       sym: 'MSFT',
-      shares: 20,
+      shares: 24,
       name: 'Microsoft Corporation',
     },
     {
       sym: 'AAPL',
-      shares: 40,
+      shares: 9,
       name: 'APPLE Inc.',
     },
     {
       sym: 'AMZN',
-      shares: 10,
+      shares: 3,
       name: 'Amazon.com Inc.',
     },
   ];
@@ -41,8 +41,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
     fetchAllInfo(stocks).then((info) => {
       store.dispatch('fetchAllinfo', info);
     }).then(() => {
-      const search = document.getElementById('search-box');
-      autocomplete(search, stockList);
       const porfolio = new Portfolio();
       porfolio.render();
     });

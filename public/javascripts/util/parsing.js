@@ -30,16 +30,15 @@ export const combineStockHistories = (histories) => (
   ))
 );
 
-export const parsePieGraph = (data) => {
+export const parsePieGraph = (company) => {
+  const symbols = ['AAPL', 'TSLA', 'MSFT', 'GOOG', 'AMZN'];
   const res = [];
-  Object.values(data).forEach((value) => {
-    const stockHistory = store.state.history[value.info.symbol];
+  symbols.forEach((sym) => {
+    const stockHistory = store.state.history[sym];
+    console.log(company[sym].shares)
     const lastDate = stockHistory.length - 1;
-    res.push({
-      sym: value.info.companyName,
-      value: parseInt(value.shares * stockHistory[lastDate].close),
-      name: value.info.companyName,
-    });
+    stockHistory[lastDate].close;
+    res.push((company[sym].shares * stockHistory[lastDate].close));
   });
   return res;
 };

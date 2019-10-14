@@ -1,138 +1,54 @@
-/* eslint-disable no-invalid-this */
-export const createPieChart = (element, dataset) => {
-  const width = d3.select(element).style('width').slice(0, -2);
-  const height = d3.select(element).style('height').slice(0, -2) * 0.95;
-  const radius = Math.min(width, height) / 2;
+/* eslint-disable require-jsdoc */
+import Chart from 'chart.js';
+import store from '../store/index.js';
+import {parsePieGraph} from '../util/parsing';
+export default class PieChart {
+  constructor(element) {
+    this.createPieChart(element);
+  }
+  createPieChart(element) {
+    const {company} = store.state;
+    const ctx = document.getElementById(element).getContext('2d');
+    this.pieChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: parsePieGraph(company),
+          backgroundColor: ['#7B1FA2', '#B31B4D', '#FC476B', '#FF8452', '#FFC04E'],
+        }],
+        labels: [
+          'Apple',
+          'Tesla',
+          'Microsoft',
+          'Google',
+          'Amazon',
+        ],
+      },
+      options: {
+        title: {
+          text: 'Stock Value as a % of Total Portfolio',
+          display: true,
+          fontSize: 20,
+        },
+      }
+    });
+  }
+  update() {
+    const {company} = store.state;
+    this.pieChart.data = {
+      datasets: [{
+        data: parsePieGraph(company),
+        backgroundColor: ['#7B1FA2', '#B31B4D', '#FC476B', '#FF8452', '#FFC04E'],
+      }],
+      labels: [
+        'Apple',
+        'Tesla',
+        'Microsoft',
+        'Google',
+        'Amazon',
+      ],
+    }
+    this.pieChart.update(0);
+  }
+}
 
-  const legendRectSize = 16;
-  const legendSpacing = 10;
-
-  const color = d3.scaleOrdinal(
-      ['#7B1FA2', '#CD128A', '#FC476B', '#FF8452', '#FFC04E', '#F9F871']
-  );
-
-  const svg = d3.select(element)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', 'translate(' + (width / 3) + ',' + (height / 2) + ')');
-  const arc = d3.arc()
-      .innerRadius(0)
-      .outerRadius(radius);
-
-  const pie = d3.pie()
-      .value(function(d) {
-        return d.value;
-      })
-      .sort(null);
-
-  const tooltip = d3.select(element)
-      .append('div')
-      .attr('class', 'tooltip');
-
-  tooltip.append('div')
-      .attr('class', 'symbol');
-
-  tooltip.append('div')
-      .attr('class', 'value');
-
-  tooltip.append('div')
-      .attr('class', 'percent');
-
-  dataset.forEach(function(d) {
-    d.value = +d.value;
-    d.enabled = true;
-  });
-
-  let path = svg.selectAll('path')
-      .data(pie(dataset))
-      .enter()
-      .append('path')
-      .attr('d', arc)
-      .attr('fill', function(d) {
-        return color(d.data.sym);
-      })
-      .each(function(d) {
-        this._current - d;
-      });
-
-
-  path.on('mouseover', function(d) {
-    const total = d3.sum(dataset.map(function(d) {
-      return (d.enabled) ? d.value : 0;
-    }));
-    const percent = Math.round(1000 * d.data.value / total) / 10;
-    tooltip.select('.symbol').html(d.data.sym);
-    tooltip.select('.value').html('$' + d.data.value);
-    tooltip.select('.percent').html(percent + '%');
-    tooltip.style('display', 'block');
-  });
-
-  path.on('mouseout', function() {
-    tooltip.style('display', 'none');
-  });
-
-  path.on('mousemove', function(d) {
-    tooltip.style('top', (d3.event.layerY + 10) + 'px')
-        .style('left', (d3.event.layerX + 10) + 'px');
-  });
-
-  const legend = svg.selectAll('.legend')
-      .data(color.domain())
-      .enter()
-      .append('g')
-      .attr('class', 'legend')
-      .attr('transform', function(d, i) {
-        const height = legendRectSize + legendSpacing;
-        const offset = height * color.domain().length / 1.5;
-        const horz = 16 * legendRectSize;
-        const vert = i * height - offset;
-        return 'translate(' + horz + ',' + vert + ')';
-      });
-
-  legend.append('rect')
-      .attr('width', legendRectSize)
-      .attr('height', legendRectSize)
-      .style('fill', color)
-      .style('stroke', color)
-      .on('click', function(sym) {
-        const rect = d3.select(this);
-        let enabled = true;
-        const totalEnabled = d3.sum(dataset.map(function(d) {
-          return (d.enabled) ? 1 : 0;
-        }));
-
-        if (rect.attr('class') === 'disabled') {
-          rect.attr('class', '');
-        } else {
-          if (totalEnabled < 2) return;
-          rect.attr('class', 'disabled');
-          enabled = false;
-        }
-
-        pie.value(function(d) {
-          if (d.sym === sym) d.enabled = enabled;
-          return (d.enabled) ? d.value : 0;
-        });
-
-        path = path.data(pie(dataset));
-
-        path.transition()
-            .duration(750)
-            .attrTween('d', function(d) {
-              const interpolate = d3.interpolate(this._current, d);
-              this._current = interpolate(0);
-              return function(t) {
-                return arc(interpolate(t));
-              };
-            });
-      });
-
-  legend.append('text')
-      .attr('x', legendRectSize + legendSpacing)
-      .attr('y', legendRectSize -2)
-      .text(function(d) {
-        return d;
-      });
-};

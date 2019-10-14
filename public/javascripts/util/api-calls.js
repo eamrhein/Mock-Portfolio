@@ -5,7 +5,7 @@ export async function fetchAllHist(syms) {
   try {
     const history = await Promise.all(
         syms.map(async (sym) => await (await
-        fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/chart/2y?token=${apikeys.iexkey}&chartInterval=14`)).json())
+        fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/chart/1y?token=${apikeys.iexkey}&chartInterval=14`)).json())
     );
     const result = {};
     syms.forEach((sym, i) => {

@@ -9,30 +9,45 @@
     <link href="https://fonts.googleapis.com/css?family=Kreon|Libre+Baskerville|Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="style.css">
-    <script src="https://use.fontawesome.com/a0b4260173.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script type="text/javascript" src="./bundle.js"></script>
   </head>
   <body>
-    <div class="headercard"></div>
-    <nav id='search'>
-      <div id="search-input">
-        <div>
-          <h1>Mock Portfolio</h1>
-        </div>
-        <div>
-          <input
-            id="search-box"
-            type="text"
-            placeholder="Lookup Stock Symbol"
-            name="symbols"
-            list="autolist"
-          />
-          <datalist id="autolist"></datalist>
-          <button id="add-stock">Add</button>
-        </div>
-      </div>
-    </nav>
+        <header id="stocklist">
+          <div>
+            <h4>Tesla Inc.</h4>
+            <li class="sharesN"></li>
+            <button id="TSLA" class="plus-btn">+</button>
+            <button id="TSLA" class="minus-btn">-</button>
+          </div>
+          <div>
+            <h4>Google Inc.</h4>
+            <li class="sharesN"></li>
+            <button id="GOOG" class="plus-btn">+</button>
+            <button id="GOOG" class="minus-btn">-</button>
+          </div>
+          <div>
+            <h4>Microsoft Corp.</h4>
+            <li class="sharesN"></li>
+            <button id="MSFT" class="plus-btn">+</button>
+            <button id="MSFT" class="minus-btn">-</button>
+          </div>
+          <div>
+            <h4>Apple Inc.</h4>
+            <li class="sharesN"></li>
+            <button id="AAPL" class="plus-btn">+</button>
+            <button id="AAPL" class="minus-btn">-</button>
+          </div>
+          <div>
+            <h4>Amazon.com Inc.</h4>
+            <li class="sharesN"></li>
+            <button id="AMZN" class="plus-btn">+</button>
+            <button id="AMZN" class="minus-btn">-</button>
+          </div>
+        </header>
+    <div class="headercard">
+      <h1>Mock Portfolio</h1>
+    </div>
     <input type="checkbox" id="toggle">
     <dialog>
       <h3>Greetings!</h3>
@@ -50,41 +65,11 @@
         <label for="toggle">close overlay</label>
       </div>
     </dialog>
-    <section id="stocklist">
-      <div>
-        <h4>Tesla Inc.</h4>
-        <li class="sharesN"></li>
-        <button id="TSLA" class="plus-btn">+</button>
-        <button id="TSLA" class="minus-btn">-</button>
-      </div>
-      <div>
-        <h4>Google Inc.</h4>
-        <li class="sharesN"></li>
-        <button id="GOOG" class="plus-btn">+</button>
-        <button id="GOOG" class="minus-btn">-</button>
-      </div>
-      <div>
-        <h4>Microsoft Corp.</h4>
-        <li class="sharesN"></li>
-        <button id="MSFT" class="plus-btn">+</button>
-        <button id="MSFT" class="minus-btn">-</button>
-      </div>
-      <div>
-        <h4>Apple Inc.</h4>
-        <li class="sharesN"></li>
-        <button id="AAPL" class="plus-btn">+</button>
-        <button id="AAPL" class="minus-btn">-</button>
-      </div>
-      <div>
-        <h4>Amazon.com Inc.</h4>
-        <li class="sharesN"></li>
-        <button id="AMZN" class="plus-btn">+</button>
-        <button id="AMZN" class="minus-btn">-</button>
-      </div>
-    </section>
     <section id="line-chart">
+      <canvas id="line-chart-cv"></canvas>
     </section>
     <section id="pie-chart">
+      <canvas id="pie-chart-cv" width="100%"></canvas>
     </section>
     <footer>
       <span>

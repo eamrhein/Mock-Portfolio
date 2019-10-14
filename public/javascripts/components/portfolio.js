@@ -2,6 +2,7 @@
 import Component from '../lib/component.js';
 import store from '../store/index.js';
 import LineChart from './linechart';
+import PieChart from './piechart';
 
 export default class Portfolio extends Component {
   constructor() {
@@ -15,15 +16,18 @@ export default class Portfolio extends Component {
   addShare(sym) {
     store.dispatch('addShare', sym);
     this.lineChart.update();
+    this.pieChart.update();
   }
 
   minusShare(sym) {
     store.dispatch('minusShare', sym);
+    this.pieChart.update();
     this.lineChart.update();
   }
 
   buildCharts() {
     this.lineChart = new LineChart('line-chart-cv');
+    this.pieChart = new PieChart('pie-chart-cv');
   }
   createElements() {
     const btns = document.getElementsByClassName('plus-btn');

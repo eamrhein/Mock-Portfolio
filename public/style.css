@@ -1,14 +1,9 @@
+
 body {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 11pt;
 	background-color: #f9f9f9;
 	color: #000000;
-	display: grid;
-	grid-template-columns: repeat(20, 4.5%);
-	grid-template-rows: repeat(20, 4.5%);
-	grid-gap: 0.75rem;
-	width: calc(100vw - 5rem);
-	height: calc(100vh - 5rem);
 }
 em {
 	font-weight: bolder;
@@ -40,7 +35,10 @@ h4 {
 }
 section {
   display: flex;
-  position: relative;
+  margin-left: 20vw;
+  margin-right: 20vw;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
 	justify-content: center;
 	border-radius: 2px;
 	align-items: center;
@@ -48,7 +46,6 @@ section {
 	background-color: #FFFEFC;
 	color: #404040;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
-	overflow: hidden;
 }
 dialog {
 	word-break: keep-all;
@@ -67,7 +64,7 @@ dialog {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	background: rgba(255, 255, 255, 0.8);
+	background: rgba(255, 255, 255, 1);
 	height: 30%;
 	width: 35%;
 	transform: translate(-50%, -50%)
@@ -78,42 +75,20 @@ dialog h3 {
 dialog div {
 	margin-left: auto;
 }
-g text {
-	font-weight: bolder;
-	text-transform: capitalize;
-}
 
-rect {
-	cursor: pointer;
-	stroke-width: 2;
-}
-rect.disabled {
-	fill: transparent !important;
-}
-label {
-	cursor: pointer;
-	font-weight: bold;
-	background: #ff4081;
-	color: white;
-	padding: .5em 1em;
-	border-radius: 2px;
-}
-@keyframes appear {
-	0% {
-		opacity: 0;
-		transform: translateY(-10px);
-	}
-}
 /* classes  */
 .headercard {
 	display: fixed;
-	width: 100vw;
-	height: 21.5vh;
+  height: 35vh;
+  display: flex;
+  justify-content: center;
 	background: linear-gradient(90deg, #303f9f, #7b1fa2);
 }
-.stocklist-item {
-	text-align: center;
-	vertical-align: center;
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3vh;
 }
 .plus-btn,
 .minus-btn {
@@ -129,80 +104,23 @@ label {
 	border: none;
 	transition: background-color .3s;
 }
-/* Ids */
-#search {
-	grid-column: 5/17;
-	grid-row: 1/4;
-}
-#search-input {
-	color: #fff;
-	margin-top: 1rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-#search-input > div {
-	display: flex;
-	margin-bottom: 1rem;
-}
-#search-input > div > input {
-	flex-direction: column;
-	height: 2rem;
-	padding: 0.25rem 1.5rem 0.25rem 1.5rem;
-	width: 20rem;
-	margin-right: 0.75rem;
-	vertical-align: middle;
-	white-space: nowrap;
-	background: rgba(255, 255, 255, 0.5);
-	border-radius: 2px;
-	border: 1px solid transparent;
-	box-shadow: 0 8px 6px -6px #404040;
-	transition: background 100ms ease-in;
-}
-#search-input > div > input:focus {
-	background: rgba(255, 255, 255, 0.9);
-}
-#search-input > div > button {
-	font-weight: bold;
-	cursor: pointer;
-	background-color: #ff4081;
-	color: #fff;
-	padding: 0.25rem 1.5rem 0.25rem 1.5rem;
-	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
-	height: 2.15rem;
-	border-radius: 2px;
-	border: none;
-	transition: background-color .3s;
-}
-#search-input > div > button:hover {
-	background-color: #B31B4D
-}
+
 #stocklist {
-	padding: 3%;
+  padding: 1vh;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  background-color: rgba(255, 255, 255, 0.8);
 	display: flex;
 	list-style: none;
-	justify-content: space-between;
-	grid-column: 5/17;
-	grid-row: 4/6;
+	justify-content: space-around;
 }
-#pie-chart {
-	justify-content: flex-start;
-	position: relative;
-	grid-column: 5/17;
-	grid-row-start: 12;
-	grid-row-end: 19;
+.headercard > h1 {
+  color: #fff;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 2vh;
 }
-#line-chart {
-	position: relative;
-	display: inline-block;
-	vertical-align: middle;
-	grid-column: 5 /17;
-	grid-row-start: 6;
-	grid-row-end: 16;
-}
-
-
 #toggle {
 	visibility: hidden;
 	opacity: 0;
@@ -211,22 +129,4 @@ label {
 }
 #toggle:checked ~ dialog {
 	display: none;
-}
-
-footer {
-	box-sizing: border-box;
-	max-width: 100%;
-	position: absolute;
-	left: 50%;
-	top: 99%;
-	text-align: center;
-	transform: translate(-50%, -99%);
-}
-footer a {
-	font-size: 9pt;
-	text-decoration: none;
-	color: #666666;
-}
-#line-chart-cv {
-  width: 100%;
 }

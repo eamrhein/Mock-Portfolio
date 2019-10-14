@@ -1,13 +1,7 @@
 /* eslint-disable require-jsdoc */
 import Component from '../lib/component.js';
 import store from '../store/index.js';
-import {
-  parseStockPrices,
-  combineStockHistories,
-  parsePieGraph}
-  from '../util/parsing';
-import {createLineChart} from './linechart';
-import {createPieChart} from './piechart';
+import LineChart from './linechart';
 
 export default class Portfolio extends Component {
   constructor() {
@@ -20,20 +14,16 @@ export default class Portfolio extends Component {
   }
   addShare(sym) {
     store.dispatch('addShare', sym);
-    d3.select('#pie-chart').select('svg').remove();
-    createPieChart('#pie-chart', parsePieGraph(store.state.company));
+    this.lineChart.update();
   }
 
   minusShare(sym) {
     store.dispatch('minusShare', sym);
-    d3.select('#pie-chart').select('svg').remove();
-    createPieChart('#pie-chart', parsePieGraph(store.state.company));
+    this.lineChart.update();
   }
 
   buildCharts() {
-    const combinedHistory = combineStockHistories(store.state.history);
-    createLineChart('#line-chart', parseStockPrices(combinedHistory));
-    createPieChart('#pie-chart', parsePieGraph(store.state.company));
+    this.lineChart = new LineChart('line-chart-cv');
   }
   createElements() {
     const btns = document.getElementsByClassName('plus-btn');

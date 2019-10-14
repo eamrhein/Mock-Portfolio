@@ -39,7 +39,8 @@ h4 {
 	font-weight: bold;
 }
 section {
-	display: flex;
+  display: flex;
+  position: relative;
 	justify-content: center;
 	border-radius: 2px;
 	align-items: center;
@@ -128,28 +129,6 @@ label {
 	border: none;
 	transition: background-color .3s;
 }
-.linelegend text {
-	font-size: 9pt;
-}
-.legend {
-	z-index: 10;
-	font-size: 14pt;
-}
-.tooltip {
-	background: #eee;
-	box-shadow: 0 0 5px #999999;
-	color: #333;
-	display: none;
-	font-size: 18px;
-	left: 130px;
-	padding: 10px;
-	position: absolute;
-	text-align: center;
-	vertical-align: center;
-	top: 95px;
-	width: 180px;
-	z-index: 10;
-}
 /* Ids */
 #search {
 	grid-column: 5/17;
@@ -220,7 +199,7 @@ label {
 	vertical-align: middle;
 	grid-column: 5 /17;
 	grid-row-start: 6;
-	grid-row-end: 12;
+	grid-row-end: 16;
 }
 
 
@@ -248,74 +227,6 @@ footer a {
 	text-decoration: none;
 	color: #666666;
 }
-
-@media only screen and (max-width: 1000px) {
-  #pie-chart {
-	justify-content: flex-start;
-	position: relative;
-	grid-column: 5/17;
-	grid-row-start: 11;
-	grid-row-end: 17;
-}
-#line-chart {
-	position: relative;
-	display: inline-block;
-	vertical-align: middle;
-	grid-column: 5 /17;
-	grid-row-start: 6;
-	grid-row-end: 11;
-}
-}
-@media only screen and (max-width: 800px) {
-  #pie-chart {
-	justify-content: flex-start;
-	position: relative;
-	grid-column: 5/17;
-	grid-row-start: 11;
-	grid-row-end: 17;
-}
-#line-chart {
-	position: relative;
-	display: inline-block;
-	vertical-align: middle;
-	grid-column: 5 /17;
-	grid-row-start: 6;
-	grid-row-end: 11;
-}
-#stocklist {
-	padding: 3%;
-	display: flex;
-	list-style: none;
-	justify-content: space-between;
-	grid-column: 3/18;
-	grid-row: 4/6;
-}
-
-}
-@media only screen and (max-width: 400px) {
-  #pie-chart {
-	justify-content: flex-start;
-	position: relative;
-	grid-column: 1/16;
-	grid-row-start: 13;
-	grid-row-end: 18;
-}
-#line-chart {
-	position: relative;
-	display: inline-block;
-	vertical-align: middle;
-	grid-column: 1 /16;
-	grid-row-start: 6;
-	grid-row-end: 12;
-}
-#stocklist {
-  display: flex;
-  flex-direction: column;
-  z-index: 3;
-  height: 100vh;
-  width: 30vw;
-  position: fixed;
-	list-style: none;
-}
-
+#line-chart-cv {
+  width: 100%;
 }

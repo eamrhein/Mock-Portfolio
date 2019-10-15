@@ -47,8 +47,8 @@ export default class PieChart {
         'Google',
         'Amazon',
       ],
-    }
-    this.pieChart.update(0);
+    },
+    this.pieChart.update();
   }
 }
 

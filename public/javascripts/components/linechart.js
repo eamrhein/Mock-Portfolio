@@ -21,7 +21,7 @@ export default class LineChart {
             data: history['AAPL'].map((day) => (
               {
                 x: new Date(day.date),
-                y: day.close * company['AAPL'].shares,
+                y: (day.close * company['AAPL'].shares).toFixed(2),
               })),
           },
           {
@@ -31,7 +31,7 @@ export default class LineChart {
             data: history['TSLA'].map((day) => (
               {
                 x: new Date(day.date),
-                y: day.close * company['TSLA'].shares,
+                y: (day.close * company['TSLA'].shares).toFixed(2),
               })),
           },
           {
@@ -41,7 +41,7 @@ export default class LineChart {
             data: history['MSFT'].map((day) => (
               {
                 x: new Date(day.date),
-                y: day.close * company['MSFT'].shares,
+                y: day.close * company['MSFT'].shares.toFixed(2),
               })),
           },
           {
@@ -51,7 +51,7 @@ export default class LineChart {
             data: history['GOOG'].map((day) => (
               {
                 x: new Date(day.date),
-                y: day.close * company['GOOG'].shares,
+                y: (day.close * company['GOOG'].shares).toFixed(2),
               })),
           },
           {
@@ -61,14 +61,28 @@ export default class LineChart {
             data: history['AMZN'].map((day) => (
               {
                 x: new Date(day.date),
-                y: day.close * company['AMZN'].shares,
+                y: (day.close * company['AMZN'].shares).toFixed(2),
               })),
           },
         ],
       },
       options: {
+        responsive: true,
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true,
+        },
         scales: {
           xAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Month',
+            },
             ticks: {
               source: 'data',
             },
@@ -82,6 +96,11 @@ export default class LineChart {
             },
           }],
           yAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Value',
+            },
             ticks: {
               beginAtZero: true,
             },
@@ -97,7 +116,6 @@ export default class LineChart {
   }
   update() {
     const {history, company} = store.state;
-    this.lineChart.options.animation.duration = 0;
     this.lineChart.data.datasets = [
       {
         label: 'Apple',
@@ -106,7 +124,7 @@ export default class LineChart {
         data: history['AAPL'].map((day) => (
           {
             x: new Date(day.date),
-            y: day.close * company['AAPL'].shares,
+            y: (day.close * company['AAPL'].shares).toFixed(2),
           })),
       },
       {
@@ -116,7 +134,7 @@ export default class LineChart {
         data: history['TSLA'].map((day) => (
           {
             x: new Date(day.date),
-            y: day.close * company['TSLA'].shares,
+            y: (day.close * company['TSLA'].shares).toFixed(2),
           })),
       },
       {
@@ -126,7 +144,7 @@ export default class LineChart {
         data: history['MSFT'].map((day) => (
           {
             x: new Date(day.date),
-            y: day.close * company['MSFT'].shares,
+            y: (day.close * company['MSFT'].shares).toFixed(2),
           })),
       },
       {
@@ -136,7 +154,7 @@ export default class LineChart {
         data: history['GOOG'].map((day) => (
           {
             x: new Date(day.date),
-            y: day.close * company['GOOG'].shares,
+            y: (day.close * company['GOOG'].shares).toFixed(2),
           })),
       },
       {
@@ -146,7 +164,7 @@ export default class LineChart {
         data: history['AMZN'].map((day) => (
           {
             x: new Date(day.date),
-            y: day.close * company['AMZN'].shares,
+            y: (day.close * company['AMZN'].shares).toFixed(2),
           })),
       },
     ];

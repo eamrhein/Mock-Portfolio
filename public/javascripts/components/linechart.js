@@ -1,71 +1,16 @@
 /* eslint-disable require-jsdoc */
 import Chart from 'chart.js';
-
-import store from '../store/index.js';
+import {dataB} from './barchart';
 
 export default class LineChart {
   constructor(element) {
     this.createLineChart(element);
   }
   createLineChart(element) {
-    const {history, company} = store.state;
     const ctx = document.getElementById(element).getContext('2d');
     this.lineChart = new Chart(ctx, {
       type: 'line',
-      data: {
-        datasets: [
-          {
-            label: 'Apple',
-            borderColor: '#7B1FA2',
-            backgroundColor: '#7B1FA2',
-            data: history['AAPL'].map((day) => (
-              {
-                x: new Date(day.date),
-                y: (day.close * company['AAPL'].shares).toFixed(2),
-              })),
-          },
-          {
-            label: 'Tesla',
-            backgroundColor: '#B31B4D',
-            borderColor: '#B31B4D',
-            data: history['TSLA'].map((day) => (
-              {
-                x: new Date(day.date),
-                y: (day.close * company['TSLA'].shares).toFixed(2),
-              })),
-          },
-          {
-            label: 'Microsoft',
-            backgroundColor: '#FC476B',
-            borderColor: '#FC476B',
-            data: history['MSFT'].map((day) => (
-              {
-                x: new Date(day.date),
-                y: day.close * company['MSFT'].shares.toFixed(2),
-              })),
-          },
-          {
-            label: 'Google',
-            backgroundColor: '#FF8452',
-            borderColor: '#FF8452',
-            data: history['GOOG'].map((day) => (
-              {
-                x: new Date(day.date),
-                y: (day.close * company['GOOG'].shares).toFixed(2),
-              })),
-          },
-          {
-            label: 'Amazon',
-            backgroundColor: '#FFC04E',
-            borderColor: '#FFC04E',
-            data: history['AMZN'].map((day) => (
-              {
-                x: new Date(day.date),
-                y: (day.close * company['AMZN'].shares).toFixed(2),
-              })),
-          },
-        ],
-      },
+      data: dataB(),
       options: {
         responsive: true,
         tooltips: {
@@ -115,59 +60,7 @@ export default class LineChart {
     });
   }
   update() {
-    const {history, company} = store.state;
-    this.lineChart.data.datasets = [
-      {
-        label: 'Apple',
-        borderColor: '#7B1FA2',
-        backgroundColor: '#7B1FA2',
-        data: history['AAPL'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['AAPL'].shares).toFixed(2),
-          })),
-      },
-      {
-        label: 'Tesla',
-        backgroundColor: '#B31B4D',
-        borderColor: '#B31B4D',
-        data: history['TSLA'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['TSLA'].shares).toFixed(2),
-          })),
-      },
-      {
-        label: 'Microsoft',
-        backgroundColor: '#FC476B',
-        borderColor: '#FC476B',
-        data: history['MSFT'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['MSFT'].shares).toFixed(2),
-          })),
-      },
-      {
-        label: 'Google',
-        backgroundColor: '#FF8452',
-        borderColor: '#FF8452',
-        data: history['GOOG'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['GOOG'].shares).toFixed(2),
-          })),
-      },
-      {
-        label: 'Amazon',
-        backgroundColor: '#FFC04E',
-        borderColor: '#FFC04E',
-        data: history['AMZN'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['AMZN'].shares).toFixed(2),
-          })),
-      },
-    ];
+    this.lineChart.data.datasets = dataB().datasets;
     this.lineChart.update();
   }
 };

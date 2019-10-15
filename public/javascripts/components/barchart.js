@@ -2,7 +2,7 @@
 import Chart from 'chart.js';
 import store from '../store/index.js';
 
-const dataB = () => {
+export const dataB = () => {
   const {history, company} = store.state;
   return {
     datasets: [
@@ -66,7 +66,6 @@ export default class BarChart {
   }
   createBarChart(element) {
     const ctx = document.getElementById(element).getContext('2d');
-    console.log(element);
     this.barChart = new Chart(ctx, {
       type: 'bar',
       data: dataB(),

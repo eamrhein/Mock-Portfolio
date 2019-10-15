@@ -1,7 +1,6 @@
 import stockList from './stocksymbols.json';
 import store from './store/index.js';
-import {fetchAllHist, fetchAllInfo} from './util/api-calls';
-import {autocomplete} from './util/dom';
+import {fetchAllHist, fetchAllInfo, getQuotes} from './util/api-calls';
 // Load up components
 import Portfolio from './components/portfolio';
 
@@ -41,8 +40,11 @@ document.addEventListener('DOMContentLoaded', (e) => {
     fetchAllInfo(stocks).then((info) => {
       store.dispatch('fetchAllinfo', info);
     }).then(() => {
-      const porfolio = new Portfolio();
-      porfolio.render();
+      getQuotes(stocks).then((data) => {
+        console.log(data);
+        const porfolio = new Portfolio();
+        porfolio.render();
+      });
     });
   }
   );

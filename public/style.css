@@ -106,14 +106,22 @@ footer {
 }
 
 #stocklist {
+  display: flex;
+  justify-content: space-around;
+}
+article {
+  display: flex;
+}
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  list-style: none;
   padding: 1vh;
   position: fixed;
   top: 0;
   width: 100vw;
   background-color: rgba(255, 255, 255, 0.8);
-	display: flex;
-	list-style: none;
-	justify-content: space-around;
 }
 .headercard > h1 {
   color: #fff;
@@ -129,4 +137,14 @@ footer {
 }
 #toggle:checked ~ dialog {
 	display: none;
+}
+.red {
+	margin-left: 2rem;
+	font-weight: bolder;
+	color: red;
+}
+.green {
+	margin-left: 2rem;
+	font-weight: bolder;
+	color: green;
 }

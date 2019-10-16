@@ -17,4 +17,7 @@ export default {
   closeModal(context) {
     context.commit('closeModal');
   },
+  updateTicker(context, payload) {
+    context.commit('updateTicker', payload);
+  },
 };

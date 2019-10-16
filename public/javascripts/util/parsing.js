@@ -35,7 +35,6 @@ export const parsePieGraph = (company) => {
   const res = [];
   symbols.forEach((sym) => {
     const stockHistory = store.state.history[sym];
-    console.log(company[sym].shares)
     const lastDate = stockHistory.length - 1;
     stockHistory[lastDate].close;
     res.push((company[sym].shares * stockHistory[lastDate].close).toFixed(2));

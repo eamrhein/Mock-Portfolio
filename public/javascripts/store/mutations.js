@@ -25,4 +25,8 @@ export default {
     state.modal = false;
     return state;
   },
+  updateTicker(state, payload) {
+    state.ticker = payload;
+    return state;
+  },
 };

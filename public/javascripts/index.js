@@ -1,39 +1,40 @@
 import stockList from './stocksymbols.json';
 import store from './store/index.js';
-import {fetchAllHist, fetchAllInfo} from './util/api-calls';
-import {autocomplete} from './util/dom';
+import {fetchAllHist, fetchAllInfo, getQuotes} from './util/api-calls';
 // Load up components
 import Portfolio from './components/portfolio';
+import StockTicker from './components/stockticker';
+
+export const stocks = [
+  {
+    sym: 'TSLA',
+    shares: 10,
+    name: 'Tesla Motors, Inc.',
+  },
+  {
+    sym: 'GOOG',
+    shares: 4,
+    name: 'Google Inc.',
+  },
+  {
+    sym: 'MSFT',
+    shares: 24,
+    name: 'Microsoft Corporation',
+  },
+  {
+    sym: 'AAPL',
+    shares: 9,
+    name: 'APPLE Inc.',
+  },
+  {
+    sym: 'AMZN',
+    shares: 3,
+    name: 'Amazon.com Inc.',
+  },
+];
 
 document.addEventListener('DOMContentLoaded', (e) => {
   // DEFALT SETTINGS
-  const stocks = [
-    {
-      sym: 'TSLA',
-      shares: 10,
-      name: 'Tesla Motors, Inc.',
-    },
-    {
-      sym: 'GOOG',
-      shares: 30,
-      name: 'Google Inc.',
-    },
-    {
-      sym: 'MSFT',
-      shares: 20,
-      name: 'Microsoft Corporation',
-    },
-    {
-      sym: 'AAPL',
-      shares: 40,
-      name: 'APPLE Inc.',
-    },
-    {
-      sym: 'AMZN',
-      shares: 10,
-      name: 'Amazon.com Inc.',
-    },
-  ];
   store.dispatch('fetchAllStockSymbols', stockList);
   fetchAllHist(stocks).then((history) => {
     store.dispatch('fetchAllhistory', history);
@@ -41,10 +42,14 @@ document.addEventListener('DOMContentLoaded', (e) => {
     fetchAllInfo(stocks).then((info) => {
       store.dispatch('fetchAllinfo', info);
     }).then(() => {
-      const search = document.getElementById('search-box');
-      autocomplete(search, stockList);
-      const porfolio = new Portfolio();
-      porfolio.render();
+      getQuotes(stocks).then((data) => {
+        store.dispatch('updateTicker', data);
+        const porfolio = new Portfolio();
+        const ticker = new StockTicker();
+        porfolio.render();
+        ticker.render();
+        ticker.updateTicker();
+      });
     });
   }
   );

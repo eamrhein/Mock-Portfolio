@@ -1,13 +1,9 @@
 /* eslint-disable require-jsdoc */
 import Component from '../lib/component.js';
 import store from '../store/index.js';
-import {
-  parseStockPrices,
-  combineStockHistories,
-  parsePieGraph}
-  from '../util/parsing';
-import {createLineChart} from './linechart';
-import {createPieChart} from './piechart';
+import LineChart from './linechart';
+import PieChart from './piechart';
+import BarChart from './barchart';
 
 export default class Portfolio extends Component {
   constructor() {
@@ -17,23 +13,26 @@ export default class Portfolio extends Component {
     });
     this.createElements();
     this.buildCharts();
+    this.updateCharts = this.updateCharts.bind(this);
   }
   addShare(sym) {
     store.dispatch('addShare', sym);
-    d3.select('#pie-chart').select('svg').remove();
-    createPieChart('#pie-chart', parsePieGraph(store.state.company));
+    this.updateCharts();
   }
 
   minusShare(sym) {
     store.dispatch('minusShare', sym);
-    d3.select('#pie-chart').select('svg').remove();
-    createPieChart('#pie-chart', parsePieGraph(store.state.company));
+    this.updateCharts();
   }
-
+  updateCharts() {
+    this.pieChart.update();
+    this.lineChart.update();
+    this.barChart.update();
+  }
   buildCharts() {
-    const combinedHistory = combineStockHistories(store.state.history);
-    createLineChart('#line-chart', parseStockPrices(combinedHistory));
-    createPieChart('#pie-chart', parsePieGraph(store.state.company));
+    this.lineChart = new LineChart('line-chart-cv');
+    this.pieChart = new PieChart('pie-chart-cv');
+    this.barChart = new BarChart('bar-chart-cv');
   }
   createElements() {
     const btns = document.getElementsByClassName('plus-btn');
@@ -58,7 +57,7 @@ export default class Portfolio extends Component {
     const companyList = Object.keys(company);
     let i= 0;
     for (const li of this.element) {
-      li.innerHTML = `${company[companyList[i]].shares} Shares`;
+      li.innerHTML = `${company[companyList[i]].shares} shares`;
       i++;
     }
   }

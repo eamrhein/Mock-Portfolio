@@ -3,4 +3,5 @@ export default {
   company: {},
   history: {},
   modal: true,
+  ticker: [],
 };

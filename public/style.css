@@ -138,3 +138,13 @@ header {
 #toggle:checked ~ dialog {
 	display: none;
 }
+.red {
+	margin-left: 2rem;
+	font-weight: bolder;
+	color: red;
+}
+.green {
+	margin-left: 2rem;
+	font-weight: bolder;
+	color: green;
+}

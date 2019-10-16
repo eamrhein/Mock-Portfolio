@@ -138,18 +138,10 @@ header {
 #toggle:checked ~ dialog {
 	display: none;
 }
-<<<<<<< HEAD
-footer {
-  top: 96%;
-  position: fixed;
-  left: 48%;
-  transform: translate(-48%, 0);
-=======
 .red {
 	margin-left: 2rem;
 	font-weight: bolder;
 	color: red;
->>>>>>> ba15a55ba29de11b785308a9fa845d2c91ef0f88
 }
 .green {
 	margin-left: 2rem;

@@ -6,11 +6,11 @@ export const parseStockPrices = (stockData) => {
     const day = stockData[i];
     const parsedStockDay = {
       date: new Date(day.date),
-      high: day.high,
-      low: day.low,
-      open: day.open,
-      close: day.close,
-      volume: day.volume,
+      high: day.high.toFixed(2),
+      low: day.low.toFixed(2),
+      open: day.open.toFixed(2),
+      close: day.close.toFixed(2),
+      volume: day.volume.toFixed(2),
     };
     prices.push(parsedStockDay);
   }

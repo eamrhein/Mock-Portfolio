@@ -33,7 +33,7 @@ export const dataB = () => {
         data: history['MSFT'].map((day) => (
           {
             x: new Date(day.date),
-            y: day.close * company['MSFT'].shares.toFixed(2),
+            y: (day.close * company['MSFT'].shares).toFixed(2),
           })),
       },
       {

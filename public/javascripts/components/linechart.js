@@ -59,8 +59,19 @@ export default class LineChart {
       },
     });
   }
+
+  sortDataSet(data) {
+    return data.sort((objA, objB) => {
+      const aClosingPrice = objA.data[objA.data.length - 1].y;
+      const bClosingPrice = objB.data[objB.data.length - 1].y;
+      return (
+        aClosingPrice - bClosingPrice
+      );
+    });
+  }
+
   update() {
-    this.lineChart.data.datasets = dataB().datasets;
+    this.lineChart.data.datasets = this.sortDataSet(dataB().datasets);
     this.lineChart.update();
   }
 };

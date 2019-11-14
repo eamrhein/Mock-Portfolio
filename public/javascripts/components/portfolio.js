@@ -15,14 +15,12 @@ export default class Portfolio extends Component {
     this.buildCharts();
     this.updateCharts = this.updateCharts.bind(this);
   }
-  addShare(sym) {
-    store.dispatch('addShare', sym);
-    this.updateCharts();
-  }
 
-  minusShare(sym) {
-    store.dispatch('minusShare', sym);
-    this.updateCharts();
+  updateShares(sym, num) {
+    store.dispatch('updateShares', {
+      sym: sym,
+      num: num,
+    });
   }
   updateCharts() {
     this.pieChart.update();
@@ -35,19 +33,10 @@ export default class Portfolio extends Component {
     this.barChart = new BarChart('bar-chart-cv');
   }
   createElements() {
-    const btns = document.getElementsByClassName('plus-btn');
-    for (const btn of btns) {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.addShare(btn.id);
-        btn.focus();
-      });
-    }
-    const btnsM = document.getElementsByClassName('minus-btn');
-    for (const btn of btnsM) {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.minusShare(btn.id);
+    for (const input of this.element) {
+      input.addEventListener('change', (e) => {
+        this.updateShares(input.id, input.value);
+        this.updateCharts();
       });
     }
   }
@@ -55,9 +44,9 @@ export default class Portfolio extends Component {
   render() {
     const {company} = store.state;
     const companyList = Object.keys(company);
-    let i= 0;
-    for (const li of this.element) {
-      li.innerHTML = `${company[companyList[i]].shares} shares`;
+    let i = 0;
+    for (const input of this.element) {
+      input.setAttribute('value', company[companyList[i]].shares);
       i++;
     }
   }

@@ -13,65 +13,46 @@
   </head>
   <body>
         <header>
-          <article id="stocklist">
+          <div id="stocklist">
           <div>
             <h4>Tesla Inc.</h4>
-            <li class="sharesN"></li>
+            <input id="TSLA" type="number" class="sharesN">shares</input>
             <div class="price"></div>
-            <button id="TSLA" class="plus-btn">+</button>
-            <button id="TSLA" class="minus-btn">-</button>
           </div>
           <div>
             <h4>Google Inc.</h4>
-            <li class="sharesN"></li>
+            <input id="GOOG" type="number" class="sharesN"> shares</input>
             <div class="price"></div>
-            <button id="GOOG" class="plus-btn">+</button>
-            <button id="GOOG" class="minus-btn">-</button>
           </div>
           <div>
             <h4>Microsoft Corp.</h4>
-            <li class="sharesN"></li>
+            <input id="MSFT" type="number" class="sharesN"> shares</input>
             <div class="price"></div>
-            <button id="MSFT" class="plus-btn">+</button>
-            <button id="MSFT" class="minus-btn">-</button>
           </div>
           <div>
             <h4>Apple Inc.</h4>
-            <li class="sharesN"></li>
+            <input id="AAPL"  type="number" class="sharesN"> shares</input>
             <div class="price"></div>
-            <button id="AAPL" class="plus-btn">+</button>
-            <button id="AAPL" class="minus-btn">-</button>
           </div>
           <div>
             <h4>Amazon.com Inc.</h4>
-            <li class="sharesN"></li>
+            <input id="AMZN"  type="number" class="sharesN"> shares</input>
             <div class="price"></div>
-            <button id="AMZN" class="plus-btn">+</button>
-            <button id="AMZN" class="minus-btn">-</button>
           </div>
-          </article>
+        </div>
         </header>
     <div class="headercard">
       <h1>Mock Portfolio</h1>
     </div>
-    <input type="checkbox" id="toggle">
-    <dialog>
-      <h3>Greetings!</h3>
-      <p>
-        Welcome to Mock-Portfolio, a stock research application that
-        lets people see how stocks have fared over the last<em>
-          year </em>
-        Depending on the number of shares you have in each company
-        the line graph and pie chart will update, showing you how your stocks have faired over time.
-      </p>
-      <p>
-        The Stock list fixed to the top of the screen autmatically updates during trading hours
-      </p>
-
-      <div>
-        <label for="toggle">close overlay</label>
-      </div>
-    </dialog>
+    <section id="display">
+        <p>
+          a stock research application that
+          lets people see how tech stocks have faired over the last year.
+          Adjust the number of shares you have in each company
+          the line graph and pie chart will update, showing you how your stocks have faired over time.
+          The stock list fixed to the top of the screen automatically updates during trading hours
+        </p>
+    </section>
     <section id="line-chart">
       <canvas id="line-chart-cv"></canvas>
     </section>
@@ -84,7 +65,7 @@
     <footer>
       <span>
         <a href="https://www.github.com/eamrhein">
-           Github
+          Github
         </a>
       </span>
       <span>

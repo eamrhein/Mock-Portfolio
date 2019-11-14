@@ -21,6 +21,11 @@ export default {
     }
     return state;
   },
+  updateShare(state, payload) {
+    if (state.company[payload.sym].shares > 0) {
+      state.company[payload.sym].shares = payload.num;
+    }
+  },
   closeModal(state) {
     state.modal = false;
     return state;

@@ -3,6 +3,16 @@ body {
   font-size: 11pt;
   background-color: #f9f9f9;
   color: #000000;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 3px;  /* Remove scrollbar space */
+  /* background: transparent;  Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #000000;
 }
 em {
   font-weight: bolder;
@@ -126,10 +136,7 @@ article {
   display: flex;
 }
 header {
-  /* display: flex;
-  flex-direction: column; */
   list-style: none;
-  padding: 1%;
   width: 100vw;
   position: fixed;
   top: 0;
@@ -160,8 +167,6 @@ header {
 }
 .price {
   font-size: smaller;
-  box-sizing: content-box;
-  width: 200px;
 }
 .price-item {
   margin-right: 5px;

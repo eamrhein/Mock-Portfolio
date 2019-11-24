@@ -10,6 +10,7 @@ export const dataB = () => {
         label: 'Apple',
         borderColor: '#7B1FA2',
         backgroundColor: '#7B1FA2',
+        pointRadius: 0,
         data: history['AAPL'].map((day) => (
           {
             x: new Date(day.date),
@@ -20,6 +21,7 @@ export const dataB = () => {
         label: 'Tesla',
         backgroundColor: '#B31B4D',
         borderColor: '#B31B4D',
+        pointRadius: 0,
         data: history['TSLA'].map((day) => (
           {
             x: new Date(day.date),
@@ -30,6 +32,7 @@ export const dataB = () => {
         label: 'Microsoft',
         backgroundColor: '#FC476B',
         borderColor: '#FC476B',
+        pointRadius: 0,
         data: history['MSFT'].map((day) => (
           {
             x: new Date(day.date),
@@ -39,6 +42,7 @@ export const dataB = () => {
       {
         label: 'Google',
         backgroundColor: '#FF8452',
+        pointRadius: 0,
         borderColor: '#FF8452',
         data: history['GOOG'].map((day) => (
           {
@@ -49,6 +53,7 @@ export const dataB = () => {
       {
         label: 'Amazon',
         backgroundColor: '#FFC04E',
+        pointRadius: 0,
         borderColor: '#FFC04E',
         data: history['AMZN'].map((day) => (
           {

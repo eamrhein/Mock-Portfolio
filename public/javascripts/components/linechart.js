@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
-import Chart from 'chart.js';
+/* eslint-disable require-jsdoc */
+import Chart from '../../../node_modules/chart.js/dist/Chart';
 import {dataB} from './barchart';
 
 export default class LineChart {
@@ -22,34 +23,38 @@ export default class LineChart {
           intersect: true,
         },
         scales: {
-          xAxes: [{
-            display: true,
-            scaleLabel: {
+          xAxes: [
+            {
               display: true,
-              labelString: 'Month',
-            },
-            ticks: {
-              source: 'data',
-            },
-            type: 'time',
-            time: {
-              unit: 'month',
-              round: 'day',
-              displayFormats: {
-                month: 'MMM',
+              scaleLabel: {
+                display: true,
+                labelString: 'Month',
+              },
+              ticks: {
+                source: 'data',
+              },
+              type: 'time',
+              time: {
+                unit: 'month',
+                round: 'day',
+                displayFormats: {
+                  month: 'MMM',
+                },
               },
             },
-          }],
-          yAxes: [{
-            display: true,
-            scaleLabel: {
+          ],
+          yAxes: [
+            {
               display: true,
-              labelString: 'Value',
+              scaleLabel: {
+                display: true,
+                labelString: 'Value',
+              },
+              ticks: {
+                beginAtZero: true,
+              },
             },
-            ticks: {
-              beginAtZero: true,
-            },
-          }],
+          ],
         },
         title: {
           display: true,
@@ -64,9 +69,7 @@ export default class LineChart {
     return data.sort((objA, objB) => {
       const aClosingPrice = objA.data[objA.data.length - 1].y;
       const bClosingPrice = objB.data[objB.data.length - 1].y;
-      return (
-        aClosingPrice - bClosingPrice
-      );
+      return aClosingPrice - bClosingPrice;
     });
   }
 
@@ -74,4 +77,4 @@ export default class LineChart {
     this.lineChart.data.datasets = this.sortDataSet(dataB().datasets);
     this.lineChart.update();
   }
-};
+}

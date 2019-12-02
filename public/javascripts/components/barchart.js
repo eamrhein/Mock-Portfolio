@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import Chart from 'chart.js';
+import Chart from '../../../node_modules/chart.js/dist/Chart';
 import store from '../store/index.js';
 
 export const dataB = () => {
@@ -11,55 +11,50 @@ export const dataB = () => {
         borderColor: '#7B1FA2',
         backgroundColor: '#7B1FA2',
         pointRadius: 0,
-        data: history['AAPL'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['AAPL'].shares).toFixed(2),
-          })),
+        data: history['AAPL'].map((day) => ({
+          x: new Date(day.date),
+          y: (day.close * company['AAPL'].shares).toFixed(2),
+        })),
       },
       {
         label: 'Tesla',
         backgroundColor: '#B31B4D',
         borderColor: '#B31B4D',
         pointRadius: 0,
-        data: history['TSLA'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['TSLA'].shares).toFixed(2),
-          })),
+        data: history['TSLA'].map((day) => ({
+          x: new Date(day.date),
+          y: (day.close * company['TSLA'].shares).toFixed(2),
+        })),
       },
       {
         label: 'Microsoft',
         backgroundColor: '#FC476B',
         borderColor: '#FC476B',
         pointRadius: 0,
-        data: history['MSFT'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['MSFT'].shares).toFixed(2),
-          })),
+        data: history['MSFT'].map((day) => ({
+          x: new Date(day.date),
+          y: (day.close * company['MSFT'].shares).toFixed(2),
+        })),
       },
       {
         label: 'Google',
         backgroundColor: '#FF8452',
         pointRadius: 0,
         borderColor: '#FF8452',
-        data: history['GOOG'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['GOOG'].shares).toFixed(2),
-          })),
+        data: history['GOOG'].map((day) => ({
+          x: new Date(day.date),
+          y: (day.close * company['GOOG'].shares).toFixed(2),
+        })),
       },
       {
         label: 'Amazon',
         backgroundColor: '#FFC04E',
         pointRadius: 0,
         borderColor: '#FFC04E',
-        data: history['AMZN'].map((day) => (
-          {
-            x: new Date(day.date),
-            y: (day.close * company['AMZN'].shares).toFixed(2),
-          })),
+        data: history['AMZN'].map((day) => ({
+          x: new Date(day.date),
+          y: (day.close * company['AMZN'].shares).toFixed(2),
+        })),
       },
     ],
   };
@@ -85,27 +80,31 @@ export default class BarChart {
         },
         responsive: true,
         scales: {
-          xAxes: [{
-            stacked: true,
-            scaleLabel: {
-              display: true,
-              labelString: 'Month',
-            },
-            ticks: {
-              source: 'data',
-            },
-            type: 'time',
-            time: {
-              unit: 'month',
-              round: 'week',
-              displayFormats: {
-                month: 'MMM',
+          xAxes: [
+            {
+              stacked: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Month',
+              },
+              ticks: {
+                source: 'data',
+              },
+              type: 'time',
+              time: {
+                unit: 'month',
+                round: 'week',
+                displayFormats: {
+                  month: 'MMM',
+                },
               },
             },
-          }],
-          yAxes: [{
-            stacked: true,
-          }],
+          ],
+          yAxes: [
+            {
+              stacked: true,
+            },
+          ],
         },
       },
     });

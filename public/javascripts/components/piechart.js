@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
-import Chart from 'chart.js';
+/* eslint-disable require-jsdoc */
+import Chart from '../../../node_modules/chart.js/dist/Chart';
 import store from '../store/index.js';
 import {parsePieGraph} from '../util/parsing';
 export default class PieChart {
@@ -12,17 +13,19 @@ export default class PieChart {
     this.pieChart = new Chart(ctx, {
       type: 'pie',
       data: {
-        datasets: [{
-          data: parsePieGraph(company),
-          backgroundColor: ['#7B1FA2', '#B31B4D', '#FC476B', '#FF8452', '#FFC04E'],
-        }],
-        labels: [
-          'Apple',
-          'Tesla',
-          'Microsoft',
-          'Google',
-          'Amazon',
+        datasets: [
+          {
+            data: parsePieGraph(company),
+            backgroundColor: [
+              '#7B1FA2',
+              '#B31B4D',
+              '#FC476B',
+              '#FF8452',
+              '#FFC04E',
+            ],
+          },
         ],
+        labels: ['Apple', 'Tesla', 'Microsoft', 'Google', 'Amazon'],
       },
       options: {
         title: {
@@ -30,25 +33,26 @@ export default class PieChart {
           display: true,
           fontSize: 20,
         },
-      }
+      },
     });
   }
   update() {
     const {company} = store.state;
-    this.pieChart.data = {
-      datasets: [{
-        data: parsePieGraph(company),
-        backgroundColor: ['#7B1FA2', '#B31B4D', '#FC476B', '#FF8452', '#FFC04E'],
-      }],
-      labels: [
-        'Apple',
-        'Tesla',
-        'Microsoft',
-        'Google',
-        'Amazon',
+    (this.pieChart.data = {
+      datasets: [
+        {
+          data: parsePieGraph(company),
+          backgroundColor: [
+            '#7B1FA2',
+            '#B31B4D',
+            '#FC476B',
+            '#FF8452',
+            '#FFC04E',
+          ],
+        },
       ],
-    },
+      labels: ['Apple', 'Tesla', 'Microsoft', 'Google', 'Amazon'],
+    }),
     this.pieChart.update();
   }
 }
-

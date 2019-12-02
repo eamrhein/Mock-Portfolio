@@ -1,0 +1,10 @@
+{
+    "short_name": "Portfolio",
+    "name": "Portfolio Data Visualization",
+    "description": "Chart.js data visualization of stock prices",
+    "start_url": "/",
+    "background_color": "#FFF",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#FFF"
+  }

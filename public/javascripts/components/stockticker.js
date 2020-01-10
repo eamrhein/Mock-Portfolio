@@ -18,7 +18,7 @@ export default class StockTicker extends Component {
     }, 9000);
   }
   render() {
-    const {ticker} = store.state;
+    const ticker = store.state;
     ticker.forEach((stock, i) => {
       const observer = new MutationObserver(() => {
         this.element[i].classList.add('changed');

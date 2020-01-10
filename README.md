@@ -12,7 +12,7 @@
 ### + Frontend State: Vanilla Javascript  
 
 ## Features
-+    Asyncronious API Call Handling 
++   Asyncronious API Call Handling 
 
 ```javascript
   export async function fetchAllHist(syms) {

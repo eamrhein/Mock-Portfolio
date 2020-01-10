@@ -7,9 +7,9 @@
 
 ![mockportfolio](https://user-images.githubusercontent.com/1903468/66330405-2eb0bc00-e8e5-11e9-9184-2d7bce20e1f9.png)
 
-##  Technologies 
-+  ### Frontend Components: Vanilla JavaScript and D3
-+  ### Frontend State: Vanilla Javascript
+## Technologies 
++  ### Frontend Components: Vanilla JavaScript and D3 
++  ### Frontend State: Vanilla Javascript 
 
 ##   Features
 + Asyncronious API Call Handling 

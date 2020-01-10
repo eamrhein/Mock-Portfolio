@@ -42,7 +42,7 @@ export default class Portfolio extends Component {
   }
 
   render() {
-    const {company} = store.state;
+    const company = store.state;
     const companyList = Object.keys(company);
     let i = 0;
     for (const input of this.element) {

@@ -25,7 +25,7 @@ export default class StockTicker extends Component {
         setTimeout(() => {
           this.element[i].classList.remove('changed');
         }, 1500);
-      }
+      },
       );
       observer.observe(this.element[i], {childList: true});
       const content = `

@@ -5,7 +5,7 @@ export async function fetchAllHist(syms) {
   try {
     const history = await Promise.all(
         syms.map(async (sym) => await (await
-        fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/chart/1y?token=${apikeys.iexkey}&chartInterval=24`)).json())
+        fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/chart/1y?token=${apikeys.iexkey}&chartInterval=24`)).json()),
     );
     const result = {};
     syms.forEach((sym, i) => {
@@ -21,7 +21,7 @@ export async function fetchAllInfo(syms) {
   try {
     const info = await Promise.all(
         syms.map(async (sym) => await (await
-        fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/company?token=${apikeys.iexkey}`)).json())
+        fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/company?token=${apikeys.iexkey}`)).json()),
     );
     const res = {};
     syms.forEach((sym, i) => {
@@ -36,7 +36,7 @@ export async function fetchAllInfo(syms) {
   }
 }
 export async function getQuotes(syms) {
-  try {
+  try 
     const info = await Promise.all(
         syms.map(async (sym) => await (await
         fetch(`https://cloud.iexapis.com/stable/stock/${sym.sym}/quote?token=${apikeys.iexkey}`)).json())
@@ -50,7 +50,7 @@ export async function getQuotes(syms) {
       });
     });
     return res;
-  } catch (err) {
+  catch (err) {
     console.log(err);
   }
 }

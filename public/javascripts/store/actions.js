@@ -12,7 +12,7 @@ export default {
     context.commit('addShare', payload);
   },
   updateShares(context, payload) {
-    context.commit('updateShare', payload)
+    context.commit('updateShare', payload);
   },
   minusShare(context, payload) {
     context.commit('minusShare', payload);

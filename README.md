@@ -48,11 +48,12 @@
       }))
     ))
   );
+  
 ````
-+      Draw  a pie chart  using d3 that automatically updates.  
++   Draw  a pie chart  using d3 that automatically updates.  
 
 ![Piechart](https://user-images.githubusercontent.com/1903468/66331032-7d128a80-e8e6-11e9-8979-b2c049f65f20.gif)
 
-+      Line  using combined data  with hover effect.  
++   Line  using combined data  with hover effect.  
 
 ![linechart](https://user-images.githubusercontent.com/1903468/66331147-bba84500-e8e6-11e9-8c0a-821e5a338546.gif)
